@@ -1,4 +1,6 @@
-﻿namespace NetPhlixDB.Data.Models
+﻿using System.Collections.Generic;
+
+namespace NetPhlixDB.Data.Models
 {
     using System;
 
@@ -7,6 +9,15 @@
         public Company()
         {
             this.Id = Guid.NewGuid().ToString();
+            this.CompanyMovies = new List<MovieCompany>();
         }
+
+        public string CompanyName { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+
+        public string Details { get; set; }
+        
+        public virtual ICollection<MovieCompany> CompanyMovies { get; set; }
     }
 }

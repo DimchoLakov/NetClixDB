@@ -9,6 +9,7 @@
         public User()
         {
             this.Watchlist = new List<Movie>();
+            this.Reviews = new List<Review>();
         }
 
         public string FirstName { get; set; }
@@ -21,8 +22,10 @@
 
         public DateTime CreatedOn { get; set; }
 
-        public byte[] Avatar { get; set; }
+        public string Avatar { get; set; }
 
         public virtual ICollection<Movie> Watchlist { get; set; }
+
+        public virtual ICollection<Review> Reviews { get; set; }
     }
 }
