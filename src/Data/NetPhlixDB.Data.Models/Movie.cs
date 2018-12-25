@@ -18,11 +18,9 @@ namespace NetPhlixDB.Data.Models
 
         public string Title { get; set; }
 
-        public string Director { get; set; }
-
         public string Storyline { get; set; }
 
-        public string Language { get; set; }
+        public Language Language { get; set; }
 
         public string Poster { get; set; }
 
@@ -37,6 +35,9 @@ namespace NetPhlixDB.Data.Models
         public double MovieRating { get; set; }
 
         public MovieType MovieType { get; set; }
+
+        public string UserId { get; set; }
+        public virtual User User { get; set; }
 
         public virtual ICollection<MovieCompany> MovieCompanies { get; set; }
 
