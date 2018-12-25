@@ -11,11 +11,11 @@ namespace NetPhlixDB.Data.Models
             this.MoviePeople = new List<MoviePerson>();
         }
 
-        public string EventTitle { get; set; }
+        public string Title { get; set; }
 
-        public string EventInfo { get; set; }
+        public string Info { get; set; }
 
-        public string EventPicture { get; set; }
+        public string Picture { get; set; }
 
         public virtual ICollection<MoviePerson> MoviePeople { get; set; }
     }
