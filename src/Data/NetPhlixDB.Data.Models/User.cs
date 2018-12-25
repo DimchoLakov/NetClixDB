@@ -10,6 +10,7 @@
         {
             this.Watchlist = new List<Movie>();
             this.Reviews = new List<Review>();
+            this.Articles = new List<Article>();
         }
 
         public string FirstName { get; set; }
@@ -27,5 +28,7 @@
         public virtual ICollection<Movie> Watchlist { get; set; }
 
         public virtual ICollection<Review> Reviews { get; set; }
+
+        public virtual ICollection<Article> Articles { get; set; }
     }
 }
