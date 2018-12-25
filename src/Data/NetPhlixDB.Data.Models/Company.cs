@@ -12,7 +12,7 @@ namespace NetPhlixDB.Data.Models
             this.CompanyMovies = new List<MovieCompany>();
         }
 
-        public string CompanyName { get; set; }
+        public string Name { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

@@ -7,5 +7,8 @@
 
         public string PersonId { get; set; }
         public virtual Person Person { get; set; }
+
+        public string EventId { get; set; }
+        public virtual Event Event { get; set; }
     }
 }

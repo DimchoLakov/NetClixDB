@@ -32,7 +32,7 @@ namespace NetPhlixDB.Data.Models
 
         public int Duration { get; set; }
 
-        public double MovieRating { get; set; }
+        public double Rating { get; set; }
 
         public MovieType MovieType { get; set; }
 
