@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
+using NetPhlixDB.Web.Middlewares;
 
 namespace NetPhlixDB.Web
 {
@@ -73,6 +74,7 @@ namespace NetPhlixDB.Web
 
             app.UseStatusCodePagesWithRedirects("/Home/Error/{0}");
 
+            app.SeedRoles();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
