@@ -6,6 +6,9 @@
 
   <ItemGroup>
     <Compile Remove="Migrations\20181225041814_Second.cs" />
+    <Compile Remove="Migrations\20181225042341_RemovedDirectorColRenamedEventColsAddedArticlesTable.cs" />
+    <Compile Remove="Migrations\20181225053616_RemovedDirectorColRenamedEventColsAddedArticlesTable.cs" />
+    <Compile Remove="Migrations\20181225053925_RemovedDirectorColRenamedEventColsAddedArticlesTable.cs" />
   </ItemGroup>
 
   <ItemGroup>

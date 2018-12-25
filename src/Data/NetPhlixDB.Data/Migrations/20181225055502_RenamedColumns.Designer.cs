@@ -10,8 +10,8 @@ using NetPhlixDB.Data;
 namespace NetPhlixDB.Data.Migrations
 {
     [DbContext(typeof(NetPhlixDbContext))]
-    [Migration("20181225042341_RemovedDirectorColRenamedEventColsAddedArticlesTable")]
-    partial class RemovedDirectorColRenamedEventColsAddedArticlesTable
+    [Migration("20181225055502_RenamedColumns")]
+    partial class RenamedColumns
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -140,7 +140,9 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<string>("Content");
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(new DateTime(2018, 12, 25, 5, 55, 1, 655, DateTimeKind.Utc).AddTicks(2243));
 
                     b.Property<string>("Image");
 
@@ -150,7 +152,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.ToTable("Article");
+                    b.ToTable("Articles");
                 });
 
             modelBuilder.Entity("NetPhlixDB.Data.Models.Company", b =>
@@ -158,11 +160,13 @@ namespace NetPhlixDB.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CompanyName");
-
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(new DateTime(2018, 12, 25, 5, 55, 1, 682, DateTimeKind.Utc).AddTicks(5935));
 
                     b.Property<string>("Details");
+
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 
@@ -190,7 +194,8 @@ namespace NetPhlixDB.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("GenreType");
+                    b.Property<string>("GenreType")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -206,15 +211,17 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<int>("Duration");
 
-                    b.Property<int>("Language");
+                    b.Property<string>("Language")
+                        .IsRequired();
 
-                    b.Property<double>("MovieRating");
-
-                    b.Property<int>("MovieType");
+                    b.Property<string>("MovieType")
+                        .IsRequired();
 
                     b.Property<string>("Poster");
 
                     b.Property<decimal>("ProductionCost");
+
+                    b.Property<double>("Rating");
 
                     b.Property<string>("Storyline");
 
@@ -233,56 +240,47 @@ namespace NetPhlixDB.Data.Migrations
 
             modelBuilder.Entity("NetPhlixDB.Data.Models.MovieCompany", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("MovieId");
 
                     b.Property<string>("CompanyId");
 
-                    b.Property<string>("MovieId");
+                    b.Property<string>("Id");
 
-                    b.HasKey("Id");
+                    b.HasKey("MovieId", "CompanyId");
 
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("MovieId");
 
                     b.ToTable("MovieCompanies");
                 });
 
             modelBuilder.Entity("NetPhlixDB.Data.Models.MovieGenre", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("MovieId");
 
                     b.Property<string>("GenreId");
 
-                    b.Property<string>("MovieId");
+                    b.Property<string>("Id");
 
-                    b.HasKey("Id");
+                    b.HasKey("MovieId", "GenreId");
 
                     b.HasIndex("GenreId");
-
-                    b.HasIndex("MovieId");
 
                     b.ToTable("MovieGenres");
                 });
 
             modelBuilder.Entity("NetPhlixDB.Data.Models.MoviePerson", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("EventId");
-
                     b.Property<string>("MovieId");
 
                     b.Property<string>("PersonId");
 
-                    b.HasKey("Id");
+                    b.Property<string>("EventId");
+
+                    b.Property<string>("Id");
+
+                    b.HasKey("MovieId", "PersonId");
 
                     b.HasIndex("EventId");
-
-                    b.HasIndex("MovieId");
 
                     b.HasIndex("PersonId");
 
@@ -306,7 +304,8 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<string>("LastName");
 
-                    b.Property<int>("PersonRole");
+                    b.Property<string>("PersonRole")
+                        .IsRequired();
 
                     b.Property<string>("Picture");
 
@@ -322,13 +321,15 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<string>("AddedBy");
 
-                    b.Property<DateTime>("DateAdded");
+                    b.Property<string>("Content");
+
+                    b.Property<DateTime>("DateAdded")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(new DateTime(2018, 12, 25, 5, 55, 1, 799, DateTimeKind.Utc).AddTicks(1065));
 
                     b.Property<string>("MovieId");
 
                     b.Property<double>("Rating");
-
-                    b.Property<string>("ReviewContent");
 
                     b.Property<string>("Title");
 
@@ -359,7 +360,9 @@ namespace NetPhlixDB.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(new DateTime(2018, 12, 25, 5, 55, 1, 806, DateTimeKind.Utc).AddTicks(1594));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
@@ -469,37 +472,43 @@ namespace NetPhlixDB.Data.Migrations
                 {
                     b.HasOne("NetPhlixDB.Data.Models.Company", "Company")
                         .WithMany("CompanyMovies")
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("NetPhlixDB.Data.Models.Movie", "Movie")
                         .WithMany("MovieCompanies")
-                        .HasForeignKey("MovieId");
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("NetPhlixDB.Data.Models.MovieGenre", b =>
                 {
                     b.HasOne("NetPhlixDB.Data.Models.Genre", "Genre")
                         .WithMany("GenreMovies")
-                        .HasForeignKey("GenreId");
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("NetPhlixDB.Data.Models.Movie", "Movie")
                         .WithMany("MovieGenres")
-                        .HasForeignKey("MovieId");
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("NetPhlixDB.Data.Models.MoviePerson", b =>
                 {
-                    b.HasOne("NetPhlixDB.Data.Models.Event")
+                    b.HasOne("NetPhlixDB.Data.Models.Event", "Event")
                         .WithMany("MoviePeople")
                         .HasForeignKey("EventId");
 
                     b.HasOne("NetPhlixDB.Data.Models.Movie", "Movie")
                         .WithMany("MoviePeople")
-                        .HasForeignKey("MovieId");
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("NetPhlixDB.Data.Models.Person", "Person")
                         .WithMany("PersonMovies")
-                        .HasForeignKey("PersonId");
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("NetPhlixDB.Data.Models.Review", b =>

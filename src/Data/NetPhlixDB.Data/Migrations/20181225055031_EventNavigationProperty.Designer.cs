@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetPhlixDB.Data;
 
 namespace NetPhlixDB.Data.Migrations
 {
     [DbContext(typeof(NetPhlixDbContext))]
-    partial class NetPhlixDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181225055031_EventNavigationProperty")]
+    partial class EventNavigationProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,7 +142,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2018, 12, 25, 5, 55, 1, 655, DateTimeKind.Utc).AddTicks(2243));
+                        .HasDefaultValue(new DateTime(2018, 12, 25, 5, 50, 30, 760, DateTimeKind.Utc).AddTicks(481));
 
                     b.Property<string>("Image");
 
@@ -158,13 +160,13 @@ namespace NetPhlixDB.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("CompanyName");
+
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2018, 12, 25, 5, 55, 1, 682, DateTimeKind.Utc).AddTicks(5935));
+                        .HasDefaultValue(new DateTime(2018, 12, 25, 5, 50, 30, 776, DateTimeKind.Utc).AddTicks(8885));
 
                     b.Property<string>("Details");
-
-                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 
@@ -212,14 +214,14 @@ namespace NetPhlixDB.Data.Migrations
                     b.Property<string>("Language")
                         .IsRequired();
 
+                    b.Property<double>("MovieRating");
+
                     b.Property<string>("MovieType")
                         .IsRequired();
 
                     b.Property<string>("Poster");
 
                     b.Property<decimal>("ProductionCost");
-
-                    b.Property<double>("Rating");
 
                     b.Property<string>("Storyline");
 
@@ -319,15 +321,15 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<string>("AddedBy");
 
-                    b.Property<string>("Content");
-
                     b.Property<DateTime>("DateAdded")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2018, 12, 25, 5, 55, 1, 799, DateTimeKind.Utc).AddTicks(1065));
+                        .HasDefaultValue(new DateTime(2018, 12, 25, 5, 50, 30, 865, DateTimeKind.Utc).AddTicks(4329));
 
                     b.Property<string>("MovieId");
 
                     b.Property<double>("Rating");
+
+                    b.Property<string>("ReviewContent");
 
                     b.Property<string>("Title");
 
@@ -360,7 +362,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2018, 12, 25, 5, 55, 1, 806, DateTimeKind.Utc).AddTicks(1594));
+                        .HasDefaultValue(new DateTime(2018, 12, 25, 5, 50, 30, 868, DateTimeKind.Utc).AddTicks(6215));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
