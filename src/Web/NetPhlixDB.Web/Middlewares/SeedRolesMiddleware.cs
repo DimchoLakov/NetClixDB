@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using NetPhlixDB.Data;
-using NetPhlixDB.Data.Models;
 
 namespace NetPhlixDB.Web.Middlewares
 {
@@ -18,19 +17,19 @@ namespace NetPhlixDB.Web.Middlewares
             this._next = next;
         }
 
-        public async Task InvokeAsync(HttpContext httpContext, IServiceProvider serviceProvider, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public async Task InvokeAsync(HttpContext httpContext, IServiceProvider serviceProvider, RoleManager<IdentityRole> roleManager)
         {
             var dbContext = serviceProvider.GetService<NetPhlixDbContext>();
 
             if (!dbContext.Roles.Any())
             {
-                await this.SeedRoles(userManager, roleManager);
+                await this.SeedRoles(roleManager);
             }
 
             await this._next(httpContext);
         }
 
-        private async Task SeedRoles(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        private async Task SeedRoles(RoleManager<IdentityRole> roleManager)
         {
             await roleManager.CreateAsync(new IdentityRole("Admin"));
             await roleManager.CreateAsync(new IdentityRole("User"));
