@@ -14,6 +14,8 @@ namespace NetPhlixDB.Services.Repositories.Contracts
 
         void Delete(TEntity entity);
 
+        Task<TEntity> GetByIdAsync(params object[] id);
+
         Task<int> SaveChangesAsync();
     }
 }

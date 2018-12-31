@@ -34,6 +34,12 @@ namespace NetPhlixDB.Services.Repositories
             this._dbSet.Remove(entity);
         }
 
+        public async Task<TEntity> GetByIdAsync(params object[] id)
+        {
+            return await this._dbSet.FindAsync(id);
+        }
+
+
         public async Task<int> SaveChangesAsync()
         {
             return await this._dbContext.SaveChangesAsync();

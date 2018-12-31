@@ -11,6 +11,13 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\NetPhlixDb.Data.ViewModels\NetPhlixDb.Data.ViewModels.csproj" />
     <ProjectReference Include="..\..\Data\NetPhlixDB.Data\NetPhlixDB.Data.csproj" />
+    <ProjectReference Include="..\Mapping\NetPhlixDB.Services.Mapping\NetPhlixDB.Services.Mapping.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>C:\Users\Lakov\.nuget\packages\automapper\8.0.0\lib\netstandard2.0\AutoMapper.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

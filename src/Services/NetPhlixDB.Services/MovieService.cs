@@ -1,21 +1,27 @@
-﻿using NetPhlixDb.Data.ViewModels;
+﻿using System.Collections.Generic;
+using AutoMapper;
+using NetPhlixDb.Data.ViewModels;
 using NetPhlixDB.Data.Models;
 using NetPhlixDB.Services.Contracts;
-using NetPhlixDB.Services.Repositories;
+using NetPhlixDB.Services.Repositories.Contracts;
 
 namespace NetPhlixDB.Services
 {
     public class MovieService : IMovieService
     {
-        private readonly DbRepository<Movie> _dbRepository;
+        private readonly IRepository<Movie> _dbRepository;
+        private readonly IMapper _mapper;
 
-        public MovieService(DbRepository<Movie> dbRepository)
+        public MovieService(IRepository<Movie> dbRepository, IMapper mapper)
         {
             this._dbRepository = dbRepository;
+            this._mapper = mapper;
         }
 
-        public void Add(MovieViewModel viewModel)
+        public IEnumerable<IndexMovieViewModel> GetAllIndexMovies()
         {
+            var allMovies = this._dbRepository.All();
+            return _mapper.Map<IEnumerable<Movie>, IEnumerable<IndexMovieViewModel>>(allMovies);
         }
     }
 }
