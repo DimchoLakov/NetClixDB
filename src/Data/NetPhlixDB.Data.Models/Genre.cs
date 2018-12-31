@@ -15,6 +15,8 @@ namespace NetPhlixDB.Data.Models
 
         public GenreType GenreType { get; set; }
 
+        public string Poster { get; set; }
+
         public virtual ICollection<MovieGenre> GenreMovies { get; set; }
     }
 }
