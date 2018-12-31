@@ -1,15 +1,9 @@
 ﻿@model IList<NetPhlixDb.Data.ViewModels.IndexMovieViewModel>
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "NetPhlix Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to NetPhlixDb</h1>
-    <h4><a asp-area="Identity" asp-page="/Account/Login">Login</a> if you have an account.</h4>
-    <h4><a asp-area="Identity" asp-page="/Account/Register">Register</a> if you are new to NetPhlixDb.</h4>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
 <div class="container pt-4 pb-4">
     <h3 class="pb-3">Popular Movies</h3>
     @for (int i = 0; i < Model.Count(); i += 2)
