@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetPhlixDB.Data;
 
 namespace NetPhlixDB.Data.Migrations
 {
     [DbContext(typeof(NetPhlixDbContext))]
-    partial class NetPhlixDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181226034735_UserBirthDateCanBeNull")]
+    partial class UserBirthDateCanBeNull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,7 +142,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2018, 12, 26, 6, 44, 19, 483, DateTimeKind.Utc).AddTicks(9643));
+                        .HasDefaultValue(new DateTime(2018, 12, 26, 3, 47, 34, 104, DateTimeKind.Utc).AddTicks(4195));
 
                     b.Property<string>("Image");
 
@@ -160,7 +162,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2018, 12, 26, 6, 44, 19, 498, DateTimeKind.Utc).AddTicks(784));
+                        .HasDefaultValue(new DateTime(2018, 12, 26, 3, 47, 34, 125, DateTimeKind.Utc).AddTicks(4180));
 
                     b.Property<string>("Details");
 
@@ -194,8 +196,6 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<string>("GenreType")
                         .IsRequired();
-
-                    b.Property<string>("Poster");
 
                     b.HasKey("Id");
 
@@ -325,7 +325,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("DateAdded")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2018, 12, 26, 6, 44, 19, 570, DateTimeKind.Utc).AddTicks(8679));
+                        .HasDefaultValue(new DateTime(2018, 12, 26, 3, 47, 34, 222, DateTimeKind.Utc).AddTicks(268));
 
                     b.Property<string>("MovieId");
 
@@ -351,6 +351,8 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<int>("Age");
+
                     b.Property<string>("Avatar");
 
                     b.Property<DateTime?>("BirthDate");
@@ -360,7 +362,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2018, 12, 26, 6, 44, 19, 574, DateTimeKind.Utc).AddTicks(2676));
+                        .HasDefaultValue(new DateTime(2018, 12, 26, 3, 47, 34, 227, DateTimeKind.Utc).AddTicks(7386));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
