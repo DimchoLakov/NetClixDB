@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Reflection;
+using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +11,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
+using NetPhlixDB.Services;
+using NetPhlixDB.Services.Contracts;
+using NetPhlixDB.Services.Mapping;
+using NetPhlixDB.Services.Repositories;
+using NetPhlixDB.Services.Repositories.Contracts;
 using NetPhlixDB.Web.Middlewares;
+using NetPhlixDB.Web.Models;
 
 namespace NetPhlixDB.Web
 {
@@ -46,6 +54,13 @@ namespace NetPhlixDB.Web
                 facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
                 facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
             });
+
+            services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
+            services.AddTransient<IMovieService, MovieService>();
+
+            var mappingConfig = new MapperConfiguration(mc => { mc.AddProfiles(typeof(MoviesProfile)); });
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddMvc(options =>
                 {

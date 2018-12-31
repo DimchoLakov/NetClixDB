@@ -8,6 +8,7 @@
 
 
   <ItemGroup>
+    <PackageReference Include="Automapper" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.2.0" />
@@ -18,6 +19,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\NetPhlixDB.Data.Models\NetPhlixDB.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\NetPhlixDB.Data\NetPhlixDB.Data.csproj" />
+    <ProjectReference Include="..\..\Services\Mapping\NetPhlixDB.Services.Mapping\NetPhlixDB.Services.Mapping.csproj" />
+    <ProjectReference Include="..\..\Services\NetPhlixDB.Services\NetPhlixDB.Services.csproj" />
   </ItemGroup>
 
 </Project>
