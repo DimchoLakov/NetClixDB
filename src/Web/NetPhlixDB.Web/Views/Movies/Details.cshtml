@@ -1,0 +1,77 @@
+﻿@model NetPhlixDb.Data.ViewModels.Movies.MovieDetailsViewModel
+
+@{
+    ViewData["Title"] = "Movie Details";
+}
+
+
+
+
+<div class="container pt-4 pb-4">
+    <h1 class="card-title text-center">@Model.Title <span class="h2">(@Model.YearReleased)</span></h1>
+    <div class="card mb-3 w-75 mx-auto">
+        <div class="row">
+            <img class="card-img-top w-25 align-self-start col-md-4" style="height: 250px" src="@Model.Poster" alt="@Model.Title">
+            <iframe class="embed-responsive-item col-md-8 border-0" src="@Model.Trailer"></iframe>
+        </div>
+        <div class="float-left">
+            <div class="card-body">
+                <p class="card-text"><strong>Storyline:</strong> @Model.Storyline</p>
+                <p class="card-text">
+                    <strong>Genres:</strong> @foreach (var m in Model.MovieGenreViewModels)
+                    {
+                        <a href="/Movies/Genre?id=@m.Id">@m.Name</a>
+                    }
+                </p>
+                <p class="card-text"><strong>Language:</strong> @Model.Language</p>
+                <p class="card-text"><strong>Type:</strong> @Model.MovieType</p>
+                <p class="card-text"><strong>Duration:</strong> @Model.Duration min</p>
+                <p class="card-text"><strong>Release Date:</strong> @Model.FullDateReleased</p>
+                <p class="card-text"><strong>Production Cost:</strong> $@Model.ProductionCost</p>
+                <p class="card-text"><strong>Rating:</strong> @Model.Rating / 10</p>
+            </div>
+        </div>
+    </div>
+    <h2 class="text-center mt-4">Cast</h2>
+    <table class="table table-striped table-hover w-75 mx-auto">
+        <thead>
+            <tr>
+                <th scope="col">Picture</th>
+                <th scope="col">Name</th>
+                <th scope="col">Profession</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model.MoviePersonViewModels)
+            {
+                <tr>
+                    <td><a href="/People/Details?id=@p.Id"><img src="@p.Picture" class="img-fluid" style="height: 50px; width: 38px" alt="@p.FullName"></a></td>
+                    <td class="pt-4"><a href="/People/Details?id=@p.Id">@p.FullName</a></td>
+                    <td class="pt-4">@p.PersonRole</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <hr class="w-75" />
+
+    <h2 class="text-center mt-4">Reviews</h2>
+    <hr class="w-75"/>
+    <div class="row w-75 mx-auto mt-2">
+        @foreach (var r in Model.MovieReviewViewModels)
+        {
+            <div class="col-sm-3">
+                <a href="/Users/Details?id=@r.UserId"><img src="@r.UserAvatar" style="height: 70px; width: 58px" class="img-fluid"></a>
+                <div class=""><a href="/Users/Details?id">@r.UserName</a></div>
+                <div class="">@r.DateAdded<br />TODO --> 1 day ago</div>
+            </div>
+            <div class="col-sm-9 text-center">
+                <div class="card-title font-weight-bold">@r.Title</div>
+                <div class="card-text">@r.Content</div>
+            </div>
+        }
+    </div>
+    <div class="text-center">
+        <a class="btn btn-primary w-25 mt-2 mb-2" href="##" onClick="history.go(-1); return false;">Back to All Movies</a>
+    </div>
+</div>
