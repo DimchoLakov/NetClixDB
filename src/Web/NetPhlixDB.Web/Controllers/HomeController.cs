@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebSockets.Internal;
+using NetPhlixDB.Data;
 using NetPhlixDB.Services.Contracts;
 using NetPhlixDB.Web.Common;
 using NetPhlixDB.Web.Models;
@@ -10,23 +10,25 @@ namespace NetPhlixDB.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IMovieService _movieService;
+        private readonly IMoviesService _moviesService;
+        private readonly NetPhlixDbContext _dbContext;
 
-        public HomeController(IMovieService movieService)
+        public HomeController(IMoviesService moviesService, NetPhlixDbContext dbContext)
         {
-            this._movieService = movieService;
+            this._moviesService = moviesService;
+            this._dbContext = dbContext;
         }
 
         public IActionResult Index()
         {
-            var indexMovies = this._movieService.GetAllIndexMovies().Take(NetConstants.IndexMoviesCount).ToList();
+            var movies = this._moviesService.GetAll().Take(NetConstants.IndexMoviesCount).ToList();
 
             if (this.User.Identity.IsAuthenticated)
             {
-                return View("IndexLoggedIn", indexMovies);
+                return RedirectToAction("All", "Movies");
             }
             
-            return View(indexMovies);
+            return View(movies);
         }
 
         public IActionResult Privacy()

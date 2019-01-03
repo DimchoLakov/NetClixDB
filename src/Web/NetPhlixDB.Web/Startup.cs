@@ -14,10 +14,8 @@ using NetPhlixDB.Data.Models;
 using NetPhlixDB.Services;
 using NetPhlixDB.Services.Contracts;
 using NetPhlixDB.Services.Mapping;
-using NetPhlixDB.Services.Repositories;
-using NetPhlixDB.Services.Repositories.Contracts;
+using NetPhlixDB.Services.Mapping.Profiles;
 using NetPhlixDB.Web.Middlewares;
-using NetPhlixDB.Web.Models;
 
 namespace NetPhlixDB.Web
 {
@@ -55,8 +53,8 @@ namespace NetPhlixDB.Web
                 facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
             });
 
-            services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
-            services.AddTransient<IMovieService, MovieService>();
+            //services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
+            services.AddTransient<IMoviesService, MoviesService>();
 
             var mappingConfig = new MapperConfiguration(mc => { mc.AddProfiles(typeof(MoviesProfile)); });
             IMapper mapper = mappingConfig.CreateMapper();
