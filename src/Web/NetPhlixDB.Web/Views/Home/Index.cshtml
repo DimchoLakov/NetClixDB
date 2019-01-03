@@ -1,4 +1,4 @@
-﻿@model IList<NetPhlixDb.Data.ViewModels.IndexMovieViewModel>
+﻿@model IList<NetPhlixDb.Data.ViewModels.Movies.IndexMovieViewModel>
 
 @{
     ViewData["Title"] = "Home Page";
@@ -8,29 +8,28 @@
     <h1 class="display-4">Welcome to NetPhlixDb</h1>
     <h4><a asp-area="Identity" asp-page="/Account/Login">Login</a> if you have an account.</h4>
     <h4><a asp-area="Identity" asp-page="/Account/Register">Register</a> if you are new to NetPhlixDb.</h4>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 <div class="container pt-4 pb-4">
-    <h3 class="pb-3">Popular Movies</h3>
+    <h2 class="pb-3 ml-3">Popular Movies</h2>
     @for (int i = 0; i < Model.Count(); i += 2)
     {
-        <div class="row">
+        <div class="card-deck">
             @for (int k = 0; k <= 1 && k + i < Model.Count; k++)
             {
                 <div class="col-sm-6">
-                    <div class="card">
+                    <div class="card mb-2">
                         <img class="card-img-top w-100" style="height: 250px" src="@Model[k + i].Poster" alt="@Model[k + i].Title">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-8">
                                     <h5 class="card-title">@Model[k + i].Title</h5>
                                     <p class="card-text">@Model[k + i].ShortStoryline</p>
-                                    <a href="/Movies/Details?id=@Model[k + i].Id" class="btn btn-primary">More Info</a>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <p><strong>Rating</strong>: @Model[k + i].Rating</p>
                                     <p>@Model[k + i].DateReleased</p>
                                 </div>
+                                <a asp-controller="Movies" asp-action="Details" asp-route-id="@Model[k + i].Id" class="btn btn-primary mx-auto">More Info</a>
                             </div>
                         </div>
                     </div>
