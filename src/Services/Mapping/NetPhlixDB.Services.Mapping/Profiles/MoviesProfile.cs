@@ -11,7 +11,7 @@ namespace NetPhlixDB.Services.Mapping.Profiles
         {
             // Index Movie View Model
             CreateMap<Movie, IndexMovieViewModel>()
-                .ForMember(dest => dest.DateReleased, mapFrom => mapFrom.MapFrom(src => src.DateReleased.ToString("MMM/dd/yyyy")))
+                .ForMember(dest => dest.DateReleased, mapFrom => mapFrom.MapFrom(src => src.DateReleased.ToString(ProfileConstants.FullDateFormat)))
                 .ForMember(
                     dest => dest.ShortStoryline,
                        mapFrom => mapFrom.MapFrom(
@@ -25,9 +25,9 @@ namespace NetPhlixDB.Services.Mapping.Profiles
             // Movie Details View Model
             CreateMap<Movie, MovieDetailsViewModel>()
                 .ForMember(dest => dest.YearReleased,
-                    mapFrom => mapFrom.MapFrom(src => src.DateReleased.ToString("yyyy")))
+                    mapFrom => mapFrom.MapFrom(src => src.DateReleased.ToString(ProfileConstants.YearDateFormat)))
                 .ForMember(dest => dest.FullDateReleased,
-                    mapFrom => mapFrom.MapFrom(src => src.DateReleased.ToString("MMM/dd/yyyy")))
+                    mapFrom => mapFrom.MapFrom(src => src.DateReleased.ToString(ProfileConstants.FullDateFormat)))
                 .ForMember(dest => dest.Language, mapFrom => mapFrom.MapFrom(src => src.Language.ToString()))
                 .ForMember(dest => dest.MovieType, mapFrom => mapFrom.MapFrom(src => src.MovieType.ToString()))
                 .ForMember(
@@ -50,9 +50,7 @@ namespace NetPhlixDB.Services.Mapping.Profiles
 
             // Movie Review View Model
             CreateMap<Review, MovieReviewViewModel>()
-                .ForMember(dest => dest.DateAdded,
-                    mapFrom => mapFrom.MapFrom(src => src.DateAdded.ToString("MMM/dd/yyyy")))
-                .ForMember(dest => dest.UserName, mapFrom => mapFrom.MapFrom(src => src.User.FirstName + "" + src.User.LastName))
+                .ForMember(dest => dest.UserName, mapFrom => mapFrom.MapFrom(src => src.User.FirstName + " " + src.User.LastName))
                 .ForMember(dest => dest.UserAvatar, mapFrom => mapFrom.MapFrom(src => src.User.Avatar));
         }
     }
