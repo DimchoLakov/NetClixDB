@@ -14,6 +14,7 @@ namespace NetPhlixDB.Data.Models
             this.MovieGenres = new List<MovieGenre>();
             this.MovieCompanies = new List<MovieCompany>();
             this.Reviews = new List<Review>();
+            this.MovieUsers = new List<MovieUser>();
         }
 
         public string Title { get; set; }
@@ -36,8 +37,7 @@ namespace NetPhlixDB.Data.Models
 
         public MovieType MovieType { get; set; }
 
-        public string UserId { get; set; }
-        public virtual User User { get; set; }
+        public virtual ICollection<MovieUser> MovieUsers { get; set; }
 
         public virtual ICollection<MovieCompany> MovieCompanies { get; set; }
 

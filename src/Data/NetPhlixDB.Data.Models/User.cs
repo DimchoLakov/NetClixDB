@@ -8,7 +8,7 @@
     {
         public User()
         {
-            this.Watchlist = new List<Movie>();
+            this.FavoriteMovies = new List<MovieUser>();
             this.Reviews = new List<Review>();
             this.Articles = new List<Article>();
         }
@@ -23,7 +23,7 @@
 
         public string Avatar { get; set; }
 
-        public virtual ICollection<Movie> Watchlist { get; set; }
+        public virtual ICollection<MovieUser> FavoriteMovies { get; set; }
 
         public virtual ICollection<Review> Reviews { get; set; }
 
