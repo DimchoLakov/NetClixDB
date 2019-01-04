@@ -4,9 +4,6 @@
     ViewData["Title"] = "Movie Details";
 }
 
-
-
-
 <div class="container pt-4 pb-4">
     <h1 class="card-title text-center">@Model.Title <span class="h2">(@Model.YearReleased)</span></h1>
     <div class="card mb-3 w-75 mx-auto">
@@ -15,12 +12,35 @@
             <iframe class="embed-responsive-item col-md-8 border-0" src="@Model.Trailer"></iframe>
         </div>
         <div class="float-left">
+            @if (!Model.UserFavoriteMovies.Contains(Model.Id))
+            {
+                <form class="mt-2" asp-controller="Users" asp-action="AddFavMovie" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="form-group">
+                        <button class="btn btn-success">Add to Favorites</button>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <div class="ml-3 mt-2 font-italic font-weight-bold">
+                    <em>This movie is already in your favorites</em>
+                </div>
+            }
             <div class="card-body">
                 <p class="card-text"><strong>Storyline:</strong> @Model.Storyline</p>
                 <p class="card-text">
-                    <strong>Genres:</strong> @foreach (var m in Model.MovieGenreViewModels)
+                    <strong>Genres:</strong>
+                    @foreach (var m in Model.MovieGenreViewModels)
                     {
                         <a href="/Movies/Genre?id=@m.Id">@m.Name</a>
+                    }
+                </p>
+                <p class="card-text">
+                    <strong>Companies:</strong>
+                    @foreach (var c in Model.MovieCompanyViewModels)
+                    {
+                        <a href="/Companies/Details?id=@c.Id">@c.Name</a>
                     }
                 </p>
                 <p class="card-text"><strong>Language:</strong> @Model.Language</p>
@@ -56,22 +76,23 @@
     <hr class="w-75" />
 
     <h2 class="text-center mt-4">Reviews</h2>
-    <hr class="w-75"/>
+    <hr class="w-75" />
     <div class="row w-75 mx-auto mt-2">
         @foreach (var r in Model.MovieReviewViewModels)
         {
+            var dateAdded = (int)(DateTime.UtcNow - r.DateAdded).TotalDays;
             <div class="col-sm-3">
                 <a href="/Users/Details?id=@r.UserId"><img src="@r.UserAvatar" style="height: 70px; width: 58px" class="img-fluid"></a>
                 <div class=""><a href="/Users/Details?id">@r.UserName</a></div>
-                <div class="">@r.DateAdded<br />TODO --> 1 day ago</div>
+                <div class="mx-1 mt-1 mb-3">Added @dateAdded day ago<br /></div>
             </div>
-            <div class="col-sm-9 text-center">
+            <div class="col-sm-9 text-center mt-1">
                 <div class="card-title font-weight-bold">@r.Title</div>
                 <div class="card-text">@r.Content</div>
             </div>
         }
     </div>
     <div class="text-center">
-        <a class="btn btn-primary w-25 mt-2 mb-2" href="##" onClick="history.go(-1); return false;">Back to All Movies</a>
+        <a class="btn btn-primary w-25 mt-2 mb-2" href="##" onClick="history.go(-1); return false;">Back</a>
     </div>
 </div>

@@ -1,0 +1,34 @@
+﻿@model IList<NetPhlixDb.Data.ViewModels.Movies.IndexMovieViewModel>
+
+@{
+    ViewData["Title"] = "My Favorite Movies";
+}
+<div class="container pt-4 pb-4">
+    <h2 class="pb-3 ml-3">My Favorite Movies</h2>
+    @for (int i = 0; i < Model.Count(); i += 2)
+    {
+        <div class="card-deck">
+            @for (int k = 0; k <= 1 && k + i < Model.Count; k++)
+            {
+                <div class="col-sm-6">
+                    <div class="card mb-2">
+                        <img class="card-img-top w-100" style="height: 250px" src="@Model[k + i].Poster" alt="@Model[k + i].Title">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <h5 class="card-title">@Model[k + i].Title</h5>
+                                    <p class="card-text">@Model[k + i].ShortStoryline</p>
+                                </div>
+                                <div class="col-sm-4">
+                                    <p><strong>Rating</strong>: @Model[k + i].Rating</p>
+                                    <p>@Model[k + i].DateReleased</p>
+                                </div>
+                                <a asp-controller="Movies" asp-action="Details" asp-route-id="@Model[k + i].Id" class="btn btn-primary mx-auto">More Info</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
