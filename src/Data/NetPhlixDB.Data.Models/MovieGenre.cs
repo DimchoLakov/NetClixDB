@@ -1,6 +1,6 @@
 ﻿namespace NetPhlixDB.Data.Models
 {
-    public class MovieGenre : BaseModel<string>
+    public class MovieGenre
     {
         public string MovieId { get; set; }
         public virtual Movie Movie { get; set; }
