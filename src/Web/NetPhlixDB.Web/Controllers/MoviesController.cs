@@ -8,10 +8,12 @@ namespace NetPhlixDB.Web.Controllers
     public class MoviesController : Controller
     {
         private readonly IMoviesService _moviesService;
+        private readonly IUsersService _usersService;
 
-        public MoviesController(IMoviesService moviesService)
+        public MoviesController(IMoviesService moviesService, IUsersService usersService)
         {
             this._moviesService = moviesService;
+            this._usersService = usersService;
         }
 
         [Authorize]
@@ -26,6 +28,7 @@ namespace NetPhlixDB.Web.Controllers
         public IActionResult Details(string id)
         {
             var movieViewModel = this._moviesService.GetById(id);
+            movieViewModel.UserFavoriteMovies = this._usersService.GetFavoriteMoviesList(this.User.Identity.Name);
 
             return this.View(movieViewModel);
         }
