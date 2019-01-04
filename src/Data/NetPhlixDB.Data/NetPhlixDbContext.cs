@@ -19,6 +19,7 @@ namespace NetPhlixDB.Data
         public virtual DbSet<MovieCompany> MovieCompanies { get; set; }
         public virtual DbSet<MovieGenre> MovieGenres { get; set; }
         public virtual DbSet<MoviePerson> MoviePeople { get; set; }
+        public virtual DbSet<MovieUser> MovieUsers { get; set; }
         public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<Review> Reviews { get; set; }
 
@@ -33,6 +34,7 @@ namespace NetPhlixDB.Data
                 .ApplyConfiguration(new MovieConfiguration())
                 .ApplyConfiguration(new MovieGenreConfiguration())
                 .ApplyConfiguration(new MoviePersonConfiguration())
+                .ApplyConfiguration(new MovieUserConfiguration())
                 .ApplyConfiguration(new PersonConfiguration())
                 .ApplyConfiguration(new ReviewConfiguration())
                 .ApplyConfiguration(new UserConfiguration());

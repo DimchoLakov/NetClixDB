@@ -25,11 +25,6 @@ namespace NetPhlixDB.Data.Configurations
                 .HasMany(x => x.Reviews)
                 .WithOne(x => x.User)
                 .HasForeignKey(x => x.UserId);
-
-            builder
-                .HasMany(x => x.Watchlist)
-                .WithOne(x => x.User)
-                .HasForeignKey(x => x.UserId);
         }
     }
 }
