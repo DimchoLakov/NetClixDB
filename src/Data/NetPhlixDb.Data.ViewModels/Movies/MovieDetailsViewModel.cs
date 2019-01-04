@@ -9,6 +9,8 @@ namespace NetPhlixDb.Data.ViewModels.Movies
             this.MovieGenreViewModels = new List<MovieGenreViewModel>();
             this.MoviePersonViewModels = new List<MoviePersonViewModel>();
             this.MovieReviewViewModels = new List<MovieReviewViewModel>();
+            this.MovieCompanyViewModels = new List<MovieCompanyViewModel>();
+            this.UserFavoriteMovies = new List<string>();
         }
 
         public string Id { get; set; }
@@ -42,6 +44,10 @@ namespace NetPhlixDb.Data.ViewModels.Movies
         public IEnumerable<MoviePersonViewModel> MoviePersonViewModels { get; set; }
 
         public IEnumerable<MovieReviewViewModel> MovieReviewViewModels { get; set; }
+
+        public IEnumerable<MovieCompanyViewModel> MovieCompanyViewModels { get; set; }
+
+        public IEnumerable<string> UserFavoriteMovies { get; set; }
 
         //public List<MovieCompany> MovieCompanies { get; set; }
     }

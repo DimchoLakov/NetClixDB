@@ -1,4 +1,6 @@
-﻿namespace NetPhlixDb.Data.ViewModels.Movies
+﻿using System;
+
+namespace NetPhlixDb.Data.ViewModels.Movies
 {
     public class MovieReviewViewModel
     {
@@ -8,7 +10,7 @@
 
         public string Content { get; set; }
 
-        public string DateAdded { get; set; }
+        public DateTime DateAdded { get; set; }
 
         public double Rating { get; set; }
 
