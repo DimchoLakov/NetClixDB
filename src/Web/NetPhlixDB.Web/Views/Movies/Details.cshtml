@@ -33,14 +33,14 @@
                     <strong>Genres:</strong>
                     @foreach (var m in Model.MovieGenreViewModels)
                     {
-                        <a href="/Movies/Genre?id=@m.Id">@m.Name</a>
+                        <a asp-controller="Genres" asp-action="Details" asp-route-id="@m.Id">@m.Name</a>
                     }
                 </p>
                 <p class="card-text">
                     <strong>Companies:</strong>
                     @foreach (var c in Model.MovieCompanyViewModels)
                     {
-                        <a href="/Companies/Details?id=@c.Id">@c.Name</a>
+                        <a asp-controller="Companies" asp-action="Details" asp-route-id="@c.Id">@c.Name</a>
                     }
                 </p>
                 <p class="card-text"><strong>Language:</strong> @Model.Language</p>
@@ -48,7 +48,7 @@
                 <p class="card-text"><strong>Duration:</strong> @Model.Duration min</p>
                 <p class="card-text"><strong>Release Date:</strong> @Model.FullDateReleased</p>
                 <p class="card-text"><strong>Production Cost:</strong> $@Model.ProductionCost</p>
-                <p class="card-text"><strong>Rating:</strong> @Model.Rating / 10</p>
+                <p class="card-text"><strong>Rating:</strong> @Model.Rating.ToString("F1") / 10</p>
             </div>
         </div>
     </div>
@@ -65,8 +65,8 @@
             @foreach (var p in Model.MoviePersonViewModels)
             {
                 <tr>
-                    <td><a href="/People/Details?id=@p.Id"><img src="@p.Picture" class="img-fluid" style="height: 50px; width: 38px" alt="@p.FullName"></a></td>
-                    <td class="pt-4"><a href="/People/Details?id=@p.Id">@p.FullName</a></td>
+                    <td><a asp-controller="People" asp-action="Details" asp-route-id="@p.Id"><img src="@p.Picture" class="img-fluid" style="height: 50px; width: 38px" alt="@p.FullName"></a></td>
+                    <td class="pt-4"><a asp-controller="People" asp-action="Details" asp-route-id="@p.Id">@p.FullName</a></td>
                     <td class="pt-4">@p.PersonRole</td>
                 </tr>
             }
@@ -75,23 +75,10 @@
 
     <hr class="w-75" />
 
-    <h2 class="text-center mt-4">Reviews</h2>
-    <hr class="w-75" />
-    <div class="row w-75 mx-auto mt-2">
-        @foreach (var r in Model.MovieReviewViewModels)
-        {
-            var dateAdded = (int)(DateTime.UtcNow - r.DateAdded).TotalDays;
-            <div class="col-sm-3">
-                <a href="/Users/Details?id=@r.UserId"><img src="@r.UserAvatar" style="height: 70px; width: 58px" class="img-fluid"></a>
-                <div class=""><a href="/Users/Details?id">@r.UserName</a></div>
-                <div class="mx-1 mt-1 mb-3">Added @dateAdded day ago<br /></div>
-            </div>
-            <div class="col-sm-9 text-center mt-1">
-                <div class="card-title font-weight-bold">@r.Title</div>
-                <div class="card-text">@r.Content</div>
-            </div>
-        }
+    <div class="text-center mx-auto h2">
+        <a style="font-size: 32px" class="btn btn-link h1" asp-controller="Reviews" asp-action="Movie" asp-route-id="@Model.Id"> See all @Model.MovieReviewViewModels.Count() user reviews</a>
     </div>
+
     <div class="text-center">
         <a class="btn btn-primary w-25 mt-2 mb-2" href="##" onClick="history.go(-1); return false;">Back</a>
     </div>

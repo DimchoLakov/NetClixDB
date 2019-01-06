@@ -20,7 +20,7 @@
                                     <p class="card-text">@Model[k + i].ShortStoryline</p>
                                 </div>
                                 <div class="col-sm-4">
-                                    <p><strong>Rating</strong>: @Model[k + i].Rating</p>
+                                    <p><strong>Rating</strong>: @Model[k + i].Rating.ToString("F1") / 10</p>
                                     <p>@Model[k + i].DateReleased</p>
                                 </div>
                                 <a asp-controller="Movies" asp-action="Details" asp-route-id="@Model[k + i].Id" class="btn btn-primary mx-auto">More Info</a>
