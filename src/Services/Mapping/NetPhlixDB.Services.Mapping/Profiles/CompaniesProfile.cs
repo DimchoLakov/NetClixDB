@@ -4,9 +4,9 @@ using NetPhlixDB.Data.Models;
 
 namespace NetPhlixDB.Services.Mapping.Profiles
 {
-    public class CompanyProfile : Profile
+    public class CompaniesProfile : Profile
     {
-        public CompanyProfile()
+        public CompaniesProfile()
         {
             // Movie Company View Model
             CreateMap<Company, MovieCompanyViewModel>()
