@@ -56,6 +56,7 @@ namespace NetPhlixDB.Web
             //services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
             services.AddTransient<IMoviesService, MoviesService>();
             services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<IReviewsService, ReviewsService>();
 
             var mappingConfig = new MapperConfiguration(
                 mc =>
@@ -63,8 +64,9 @@ namespace NetPhlixDB.Web
                     mc.AddProfiles(
                         typeof(MoviesProfile), 
                         typeof(UsersProfile),
-                        typeof(CompanyProfile)
-                        );
+                        typeof(CompaniesProfile),
+                        typeof(ReviewsProfile)
+                    );
                 });
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
