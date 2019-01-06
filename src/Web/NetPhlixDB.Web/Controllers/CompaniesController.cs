@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace NetPhlixDB.Web.Controllers
 {
-    public class PeopleController : Controller
+    public class CompaniesController : Controller
     {
-        [Authorize]
         public IActionResult Details(string id)
         {
             return View();

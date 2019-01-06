@@ -33,11 +33,15 @@ namespace NetPhlixDB.Web.Controllers
         [Authorize]
         public IActionResult FavoriteMovies()
         {
-            var user = this._usersService.GetUserByEmail(this.User.Identity.Name);
-
-            var favoriteMovies = this._usersService.GetFavoriteMovies(user.Email).ToList();
+            var favoriteMovies = this._usersService.GetFavoriteMovies(this.User.Identity.Name).ToList();
 
             return this.View(favoriteMovies);
+        }
+
+        [Authorize]
+        public IActionResult Details(string id)
+        {
+            return this.View();
         }
     }
 }

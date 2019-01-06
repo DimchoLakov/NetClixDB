@@ -3,12 +3,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace NetPhlixDB.Web.Controllers
 {
-    public class PeopleController : Controller
+    public class EventsController : Controller
     {
+        [Authorize]
+        public IActionResult All()
+        {
+            return this.View();
+        }
+
         [Authorize]
         public IActionResult Details(string id)
         {
-            return View();
+            return this.View();
         }
     }
 }
