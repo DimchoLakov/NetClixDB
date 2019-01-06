@@ -19,7 +19,7 @@ namespace NetPhlixDb.Data.ViewModels.Movies
 
         public string Title { get; set; }
 
-        public string Rating { get; set; }
+        public double Rating { get; set; }
 
         public string Storyline { get; set; }
 
