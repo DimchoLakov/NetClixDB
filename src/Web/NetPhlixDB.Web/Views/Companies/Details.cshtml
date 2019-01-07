@@ -1,7 +1,58 @@
-﻿
+﻿@model NetPhlixDb.Data.ViewModels.Companies.CompanyViewModel
+
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Company Details";
 }
 
-<h1>Companies Details</h1>
-
+<div class="container w-75">
+    <h2 class="text-center mb-4 mt-4">@Model.Name - Details</h2>
+    <div class="d-flex">
+        <div class="col">
+            <div class="row mx-auto">
+                <div class="col-md-3">
+                    <p>Company name:</p>
+                </div>
+                <div class="col">
+                    <p class="font-weight-bold">@Model.Name</p>
+                </div>
+            </div>
+            <div class="row mx-auto">
+                <div class="col-md-3">
+                    <p>Established:</p>
+                </div>
+                <div class="col">
+                    <p class="font-weight-bold">@Model.CreatedOn.ToString("MMM/d/yyyy")</p>
+                </div>
+            </div>
+            <div class="row mx-auto">
+                <div class="col-md-3">
+                    <p>Details:</p>
+                </div>
+                <div class="col">
+                    <p class="font-weight-bold">@Model.Details</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <img class="img-fluid" src="@Model.Logo" alt="@Model.Name" style="height: 150px; width: 150px" />
+        </div>
+    </div>
+    <h4 class="text-center mt-4 mb-4">Company Movies</h4>
+    @if (!Model.CompanyMoviesViewModels.Any())
+    {
+        <p class="font-italic text-center">This company has no movies yet.</p>
+    }
+    else
+    {
+        foreach (var m in Model.CompanyMoviesViewModels)
+        {
+            <div class="col">
+                <a asp-controller="Movies" asp-action="Details" asp-route-id="@m.Id"><img class="img-fluid" style="height: 72px; width: 60px" src="@m.Poster" /></a>
+                <a asp-controller="Movies" asp-action="Details" asp-route-id="@m.Id">@m.Title (@m.DateReleased.ToString("yyyy"))</a>
+            </div>
+        }
+    }
+    <div class="text-center">
+        <a class="btn btn-primary w-25 mt-2 mb-2" href="##" onClick="history.go(-1); return false;">Back</a>
+    </div>
+</div>

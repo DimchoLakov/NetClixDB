@@ -24,7 +24,7 @@
             else
             {
                 <div class="ml-3 mt-2 font-italic font-weight-bold">
-                    <em>This movie is already in your favorites</em>
+                    <em>This movie is already in <a class="nav-link" asp-controller="Users" asp-action="Favorites">your favorites</a></em>
                 </div>
             }
             <div class="card-body">
@@ -76,7 +76,15 @@
     <hr class="w-75" />
 
     <div class="text-center mx-auto h2">
-        <a style="font-size: 32px" class="btn btn-link h1" asp-controller="Reviews" asp-action="Movie" asp-route-id="@Model.Id"> See all @Model.MovieReviewViewModels.Count() user reviews</a>
+        @if (!Model.MovieReviewViewModels.Any())
+        {
+            <a style="font-size: 32px" class="btn btn-link h1" asp-controller="Reviews" asp-action="Movie" asp-route-id="@Model.Id">Review this title</a>
+        }
+        else
+        {
+            <a style="font-size: 32px" class="btn btn-link h1" asp-controller="Reviews" asp-action="Movie" asp-route-id="@Model.Id"> See all @Model.MovieReviewViewModels.Count() user reviews</a>
+
+        }
     </div>
 
     <div class="text-center">

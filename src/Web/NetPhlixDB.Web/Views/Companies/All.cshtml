@@ -1,0 +1,38 @@
+﻿@model IEnumerable<NetPhlixDb.Data.ViewModels.Companies.CompanyShortViewModel>
+
+@{
+    ViewData["Title"] = "All Companies";
+}
+
+<div class="container w-75">
+    <h1 class="text-center mt-3 mb-3">All Companies</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Logo</th>
+                <th scope="col">Name</th>
+                <th scope="col">Established</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ var index = 1;}
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <th scope="row">@index</th>
+                    <td><a asp-controller="Companies" asp-action="Details" asp-route-id="@c.Id"><img class="img-fluid" style="height: 60px; width: 50px" src="@c.Logo" /></a></td>
+                    <td><a asp-controller="Companies" asp-action="Details" asp-route-id="@c.Id">@c.Name</a></td>
+                    <td>@c.CreatedOn.ToString("MMM/dd/yyyy")</td>
+                </tr>
+                {
+                    index++;
+                }
+            }
+        </tbody>
+    </table>
+    <div class="text-center">
+        <a class="btn btn-primary w-25 mt-2 mb-2" href="##" onClick="history.go(-1); return false;">Back</a>
+    </div>
+</div>
+

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<NetPhlixDb.Data.ViewModels.People.PersonViewModel>
+
+@{
+    ViewData["Title"] = "Celebrities";
+}
+
+<div class="container w-75">
+    <h1 class="text-center mt-3 mb-3">Celebrities</h1>
+    <table class="table table-striped text-center">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Picture</th>
+                <th scope="col">Name</th>
+                <th scope="col">Birth Date</th>
+                <th scope="col">Profession</th>
+                <th scope="col">Birth Place</th>
+                <th scope="col">Bio</th>
+            </tr>
+        </thead>
+        <tbody>
+        @{ var index = 1;}
+        @foreach (var p in Model)
+        {
+            <tr>
+                <th scope="row">@index</th>
+                <td><a asp-controller="People" asp-action="Details" asp-route-id="@p.Id"><img class="img-fluid" style="height: 70px; width: 70px" src="@p.Picture" /></a></td>
+                <td><a asp-controller="People" asp-action="Details" asp-route-id="@p.Id">@p.Name</a></td>
+                <td>@p.BirthDate.ToString("MMM/dd/yyyy")</td>
+                <td>@p.Role</td>
+                <td>@p.BirthPlace</td>
+                <td class="text-justify">@p.Bio</td>
+            </tr>
+            {
+                index++;
+            }
+        }
+        </tbody>
+    </table>
+    <div class="text-center">
+        <a class="btn btn-primary w-25 mt-2 mb-2" href="##" onClick="history.go(-1); return false;">Back</a>
+    </div>
+</div>
