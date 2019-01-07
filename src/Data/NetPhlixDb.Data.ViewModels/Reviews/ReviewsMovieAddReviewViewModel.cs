@@ -13,6 +13,8 @@ namespace NetPhlixDb.Data.ViewModels.Reviews
 
         public IEnumerable<MovieReviewViewModel> MovieReviewViewModels { get; set; }
 
+        public string MovieTitle { get; set; }
+
         [Required]
         [Display(Name = "Title")]
         [StringLength(maximumLength: 32, ErrorMessage = "The {0} must be between {2} and {1} characters long.", MinimumLength = 2)]
