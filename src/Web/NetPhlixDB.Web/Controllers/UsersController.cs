@@ -27,11 +27,11 @@ namespace NetPhlixDB.Web.Controllers
             var user = this._usersService.GetUserByEmail(this.User.Identity.Name);
             this._usersService.AddFavoriteMovie(viewModel.Id, user.Id);
 
-            return RedirectToAction("FavoriteMovies", "Users");
+            return RedirectToAction("Favorites", "Users");
         }
 
         [Authorize]
-        public IActionResult FavoriteMovies()
+        public IActionResult Favorites()
         {
             var favoriteMovies = this._usersService.GetFavoriteMovies(this.User.Identity.Name).ToList();
 
