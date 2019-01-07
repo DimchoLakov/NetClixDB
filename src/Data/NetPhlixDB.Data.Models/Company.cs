@@ -17,6 +17,8 @@ namespace NetPhlixDB.Data.Models
         public DateTime CreatedOn { get; set; }
 
         public string Details { get; set; }
+
+        public string Logo { get; set; }
         
         public virtual ICollection<MovieCompany> CompanyMovies { get; set; }
     }
