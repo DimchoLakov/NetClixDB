@@ -8,5 +8,7 @@ namespace NetPhlixDB.Services.Contracts
         IEnumerable<IndexMovieViewModel> GetAll();
 
         MovieDetailsViewModel GetById(string id);
+
+        string GetMovieTitleById(string id);
     }
 }

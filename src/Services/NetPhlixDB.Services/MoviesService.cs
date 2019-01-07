@@ -48,5 +48,10 @@ namespace NetPhlixDB.Services
 
             return movieViewModel;
         }
+
+        public string GetMovieTitleById(string id)
+        {
+            return this._dbContext.Movies.FirstOrDefault(x => x.Id == id).Title;
+        }
     }
 }

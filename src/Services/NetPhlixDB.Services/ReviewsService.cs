@@ -15,21 +15,25 @@ namespace NetPhlixDB.Services
     {
         private readonly NetPhlixDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IMoviesService _moviesService;
 
-        public ReviewsService(NetPhlixDbContext dbContext, IMapper mapper)
+        public ReviewsService(NetPhlixDbContext dbContext, IMapper mapper, IMoviesService moviesService)
         {
             this._dbContext = dbContext;
             this._mapper = mapper;
+            this._moviesService = moviesService;
         }
 
         public ReviewsMovieAddReviewViewModel AllReviewsForMovie(string movieId)
         {
             var reviews = this._dbContext.Movies.Where(x => x.Id == movieId).SelectMany(x => x.Reviews).OrderByDescending(x => x.DateAdded).ToList();
             var reviewsViewModels = this._mapper.Map<IEnumerable<Review>, IEnumerable<MovieReviewViewModel>>(reviews);
+            var movieTitle = this._moviesService.GetMovieTitleById(movieId);
 
             var reviewsMovieAddReviewViewModel = new ReviewsMovieAddReviewViewModel()
             {
-                MovieReviewViewModels = reviewsViewModels
+                MovieReviewViewModels = reviewsViewModels,
+                MovieTitle = movieTitle
             };
 
             return reviewsMovieAddReviewViewModel;
