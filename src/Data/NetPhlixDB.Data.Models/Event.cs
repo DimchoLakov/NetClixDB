@@ -17,6 +17,8 @@ namespace NetPhlixDB.Data.Models
 
         public string Picture { get; set; }
 
+        public DateTime Date { get; set; }
+
         public virtual ICollection<MoviePerson> MoviePeople { get; set; }
     }
 }

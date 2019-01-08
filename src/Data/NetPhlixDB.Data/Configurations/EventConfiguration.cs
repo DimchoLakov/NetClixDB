@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NetPhlixDB.Data.Models;
 
@@ -15,6 +16,10 @@ namespace NetPhlixDB.Data.Configurations
                 .HasMany(x => x.MoviePeople)
                 .WithOne(x => x.Event)
                 .HasForeignKey(x => x.EventId);
+
+            builder
+                .Property(x => x.Date)
+                .HasDefaultValue(DateTime.UtcNow);
         }
     }
 }
