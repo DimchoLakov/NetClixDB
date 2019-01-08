@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using NetPhlixDb.Data.ViewModels.Reviews;
+using NetPhlixDb.Data.ViewModels.Binding.Reviews;
 
 namespace NetPhlixDB.Services.Contracts
 {

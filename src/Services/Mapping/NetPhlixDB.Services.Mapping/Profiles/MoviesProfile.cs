@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using AutoMapper;
+using NetPhlixDb.Data.ViewModels.Binding.Movies;
 using NetPhlixDb.Data.ViewModels.Movies;
 using NetPhlixDB.Data.Models;
 
@@ -52,6 +53,11 @@ namespace NetPhlixDB.Services.Mapping.Profiles
             CreateMap<Review, MovieReviewViewModel>()
                 .ForMember(dest => dest.UserName, mapFrom => mapFrom.MapFrom(src => src.User.FirstName + " " + src.User.LastName))
                 .ForMember(dest => dest.UserAvatar, mapFrom => mapFrom.MapFrom(src => src.User.Avatar));
+
+            // Create Movie View Model
+            CreateMap<CreateMovieViewModel, Movie>()
+                //.ForMember(dest => dest.Trailer, mapFrom => mapFrom.MapFrom(src => src.Trailer.UrlToEmbedCode()))
+                .ReverseMap();
         }
     }
 }
