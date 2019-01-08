@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -13,7 +12,6 @@ using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
 using NetPhlixDB.Services;
 using NetPhlixDB.Services.Contracts;
-using NetPhlixDB.Services.Mapping;
 using NetPhlixDB.Services.Mapping.Profiles;
 using NetPhlixDB.Web.Middlewares;
 
@@ -59,6 +57,7 @@ namespace NetPhlixDB.Web
             services.AddTransient<IReviewsService, ReviewsService>();
             services.AddTransient<ICompaniesService, CompaniesService>();
             services.AddTransient<IPeopleService, PeopleService>();
+            services.AddTransient<IEventsService, EventsService>();
 
             var mappingConfig = new MapperConfiguration(
                 mc =>
@@ -68,7 +67,8 @@ namespace NetPhlixDB.Web
                         typeof(UsersProfile),
                         typeof(CompaniesProfile),
                         typeof(ReviewsProfile),
-                        typeof(PeopleProfile)
+                        typeof(PeopleProfile),
+                        typeof(EventsProfile)
                     );
                 });
             IMapper mapper = mappingConfig.CreateMapper();
@@ -113,6 +113,14 @@ namespace NetPhlixDB.Web
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
             });
         }
     }

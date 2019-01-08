@@ -1,7 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using NetPhlixDB.Data;
+using NetPhlixDB.Data.Models;
 using NetPhlixDB.Services.Contracts;
 using NetPhlixDB.Web.Common;
 using NetPhlixDB.Web.Models;

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NetPhlixDb.Data.ViewModels.Reviews;
+using NetPhlixDb.Data.ViewModels.Binding.Reviews;
 using NetPhlixDB.Services;
 using NetPhlixDB.Services.Contracts;
 

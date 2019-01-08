@@ -26,6 +26,12 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-controller="Users" asp-action="Favorites">My Favorite Movies</a>
                     </li>
+                    if (this.User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item font-weight-bold ml-5">
+                            <a class="nav-link text-dark text-success" asp-area="Admin" asp-controller="Home" asp-action="Index">Admin Page</a>
+                        </li>
+                    }
                 }
             </ul>
         </div>

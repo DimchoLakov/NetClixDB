@@ -1,7 +1,35 @@
-﻿
+﻿@model NetPhlixDb.Data.ViewModels.Events.EventViewModel
+
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Event Details";
 }
 
-<h1>Event Details</h1>
+<div class="container w-75">
+    <h2 class="text-center mb-4 mt-4">@Model.Title (@Model.Date.Year)</h2>
+    <div class="card mb-3">
+        <img class="card-img-top" src="@Model.Picture" alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Title</h5>
+            <p class="card-text">@Model.Info</p>
+        </div>
+    </div>
+    <h3>Related Movies</h3>
+    @foreach (var m in Model.EventMovieViewModels)
+    {
+        <a class="pagination" asp-controller="Movies" asp-action="Details" asp-route-id="@m.Id">@m.Title (@m.Date.Year)</a>
+    }
+
+    <h3 class="mt-3">Related People</h3>
+    @foreach (var p in Model.EventPersonViewModels)
+    {
+        <div class="pagination">
+            <a asp-controller="People" asp-action="Details" asp-route-id="@p.Id">@p.FullName</a>
+            <a asp-controller="People" asp-action="Details" asp-route-id="@p.Id"><img src="@p.Picture" class="img-fluid" style="height: 50px; width: 38px" alt="@p.FullName"></a>
+        </div>
+    }
+
+    <div class="text-center">
+        <a class="btn btn-primary w-25 mt-2 mb-2" href="##" onClick="history.go(-1); return false;">Back</a>
+    </div>
+</div>
 
