@@ -1,0 +1,89 @@
+﻿@using NetPhlixDB.Data.Models.Enums
+@model NetPhlixDb.Data.ViewModels.Binding.Movies.CreateMovieViewModel
+
+@{
+    ViewData["Title"] = "Create Movie";
+}
+
+<div class="container w-75">
+    <h1>Create</h1>
+    <h4>Movie</h4>
+    <hr />
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="Title" class="col-form-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Storyline" class="col-form-label"></label>
+                    <input asp-for="Storyline" class="form-control" />
+                    <span asp-validation-for="Storyline" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="Language" class="col-form-label"></label>
+                    <select asp-for="Language" asp-items="Html.GetEnumSelectList<Language>()" class="form-control"></select>
+                    <span asp-validation-for="Language" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Poster" class="col-form-label"></label>
+                    <input asp-for="Poster" class="form-control" />
+                    <span asp-validation-for="Poster" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="Trailer" class="col-form-label"></label>
+                    <input asp-for="Trailer" class="form-control" />
+                    <span asp-validation-for="Trailer" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DateReleased" class="col-form-label"></label>
+                    <input asp-for="DateReleased" class="form-control" />
+                    <span asp-validation-for="DateReleased" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="ProductionCost" class="col-form-label"></label>
+                    <input asp-for="ProductionCost" class="form-control" />
+                    <span asp-validation-for="ProductionCost" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Duration" class="col-form-label"></label>
+                    <input asp-for="Duration" class="form-control" />
+                    <span asp-validation-for="Duration" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="Rating" class="col-form-label"></label>
+                    <input asp-for="Rating" class="form-control" />
+                    <span asp-validation-for="Rating" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="MovieType" class="col-form-label"></label>
+                    <select asp-for="MovieType" asp-items="Html.GetEnumSelectList<MovieType>()" class="form-control"></select>
+                    <span asp-validation-for="MovieType" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
