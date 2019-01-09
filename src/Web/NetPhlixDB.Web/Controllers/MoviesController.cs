@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetPhlixDB.Services.Contracts;
@@ -17,18 +19,38 @@ namespace NetPhlixDB.Web.Controllers
         }
 
         [Authorize]
-        public IActionResult All()
+        public async Task<IActionResult> All(int? currentPage = 1)
         {
-            var allMovies = this._moviesService.GetAll().ToList();
+            var allMovies = await this._moviesService.GetAll();
 
-            return this.View(allMovies);
+            var count = allMovies.Count();
+            var size = 10;
+            var totalPages = (int)Math.Ceiling(decimal.Divide(count, size));
+
+            if (currentPage <= 1)
+            {
+                currentPage = 1;
+            }
+            if (currentPage >= totalPages)
+            {
+                currentPage = totalPages;
+            }
+
+            var skip = (int)(currentPage - 1) * size;
+            var take = size;
+
+            this.ViewBag.CurrentPage = currentPage;
+            this.ViewBag.FirstPage = 1;
+            this.ViewBag.LastPage = totalPages;
+
+            return this.View(allMovies.Take(take).ToList());
         }
 
         [Authorize]
-        public IActionResult Details(string id)
+        public async Task<IActionResult> Details(string id)
         {
-            var movieViewModel = this._moviesService.GetById(id);
-            movieViewModel.UserFavoriteMovies = this._usersService.GetFavoriteMoviesList(this.User.Identity.Name);
+            var movieViewModel = await this._moviesService.GetById(id);
+            movieViewModel.UserFavoriteMovies = await this._usersService.GetFavoriteMoviesList(this.User.Identity.Name);
 
             return this.View(movieViewModel);
         }

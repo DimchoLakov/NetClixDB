@@ -1,9 +1,7 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using NetPhlixDB.Data;
-using NetPhlixDB.Data.Models;
 using NetPhlixDB.Services.Contracts;
 using NetPhlixDB.Web.Common;
 using NetPhlixDB.Web.Models;
@@ -13,35 +11,32 @@ namespace NetPhlixDB.Web.Controllers
     public class HomeController : Controller
     {
         private readonly IMoviesService _moviesService;
-        private readonly NetPhlixDbContext _dbContext;
 
-        public HomeController(IMoviesService moviesService, NetPhlixDbContext dbContext)
+        public HomeController(IMoviesService moviesService)
         {
             this._moviesService = moviesService;
-            this._dbContext = dbContext;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var movies = this._moviesService.GetAll().Take(NetConstants.IndexMoviesCount).ToList();
-
+            var movies = await this._moviesService.GetAll();
             if (this.User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("All", "Movies");
             }
-            
-            return View(movies);
+
+            return View(movies.Take(NetConstants.IndexMoviesCount).ToList());
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> About()
         {
-            return View();
+            return await Task.Run(() => this.View());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public async Task<IActionResult> Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return await Task.Run(() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier }));
         }
     }
 }

@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using NetPhlixDb.Data.ViewModels.People;
 
 namespace NetPhlixDB.Services.Contracts
 {
     public interface IPeopleService
     {
-        IEnumerable<PersonViewModel> GetAll();
+        Task<IEnumerable<PersonViewModel>> GetAll();
 
-        PersonViewModel GetById(string id);
+        Task<PersonViewModel> GetById(string id);
     }
 }

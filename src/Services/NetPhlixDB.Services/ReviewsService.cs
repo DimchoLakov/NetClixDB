@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NetPhlixDb.Data.ViewModels.Binding.Reviews;
 using NetPhlixDb.Data.ViewModels.Movies;
 using NetPhlixDB.Data;
@@ -24,11 +25,16 @@ namespace NetPhlixDB.Services
             this._moviesService = moviesService;
         }
 
-        public ReviewsMovieAddReviewViewModel AllReviewsForMovie(string movieId)
+        public async Task<ReviewsMovieAddReviewViewModel> AllReviewsForMovie(string movieId)
         {
-            var reviews = this._dbContext.Movies.Where(x => x.Id == movieId).SelectMany(x => x.Reviews).OrderByDescending(x => x.DateAdded).ToList();
+            var reviews = await this._dbContext.Movies
+                                                .Where(x => x.Id == movieId)
+                                                .SelectMany(x => x.Reviews)
+                                                .OrderByDescending(x => x.DateAdded)
+                                                .ToListAsync();
+
             var reviewsViewModels = this._mapper.Map<IEnumerable<Review>, IEnumerable<MovieReviewViewModel>>(reviews);
-            var movieTitle = this._moviesService.GetMovieTitleById(movieId);
+            var movieTitle = await this._moviesService.GetMovieTitleById(movieId);
 
             var reviewsMovieAddReviewViewModel = new ReviewsMovieAddReviewViewModel()
             {
@@ -41,7 +47,7 @@ namespace NetPhlixDB.Services
 
         public async Task AddReview(AddReviewViewModel viewModel)
         {
-            var user = this._dbContext.Users.FirstOrDefault(x => x.Id == viewModel.UserId);
+            var user = await this._dbContext.Users.FirstOrDefaultAsync(x => x.Id == viewModel.UserId);
             var name = user.FirstName + user.LastName;
             var email = user.Email.Substring(0, user.Email.IndexOf("@"));
             name = string.IsNullOrWhiteSpace(name) ? email : name;

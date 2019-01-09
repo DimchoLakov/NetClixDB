@@ -21,19 +21,19 @@ namespace NetPhlixDB.Services
             this._dbContext = dbContext;
         }
 
-        public IEnumerable<IndexMovieViewModel> GetAll()
+        public async Task<IEnumerable<IndexMovieViewModel>> GetAll()
         {
-            var movies = this._dbContext.Movies.ToList();
+            var movies = await this._dbContext.Movies.OrderByDescending(x => x.DateReleased).ToListAsync();
             return _mapper.Map<IEnumerable<Movie>, IEnumerable<IndexMovieViewModel>>(movies);
         }
 
-        public MovieDetailsViewModel GetById(string id)
+        public async Task<MovieDetailsViewModel> GetById(string id)
         {
-            var movieById = this._dbContext.Movies.FirstOrDefault(x => x.Id == id);
-            var genresByMovieId = this._dbContext.MovieGenres.Where(x => x.MovieId == id).Select(x => x.Genre).ToList();
-            var peopleByMovieId = this._dbContext.MoviePeople.Where(x => x.MovieId == id).Select(x => x.Person).ToList();
-            var companiesByMovieId = this._dbContext.MovieCompanies.Where(x => x.MovieId == id).Select(x => x.Company).ToList();
-            var reviewsByMovieId = this._dbContext.Reviews.Where(x => x.MovieId == id).ToList();
+            var movieById = await this._dbContext.Movies.FirstOrDefaultAsync(x => x.Id == id);
+            var genresByMovieId = await this._dbContext.MovieGenres.Where(x => x.MovieId == id).Select(x => x.Genre).ToListAsync();
+            var peopleByMovieId = await this._dbContext.MoviePeople.Where(x => x.MovieId == id).Select(x => x.Person).ToListAsync();
+            var companiesByMovieId = await this._dbContext.MovieCompanies.Where(x => x.MovieId == id).Select(x => x.Company).ToListAsync();
+            var reviewsByMovieId = await this._dbContext.Reviews.Where(x => x.MovieId == id).ToListAsync();
 
             var genreViewModels = this._mapper.Map<IEnumerable<Genre>, IEnumerable<MovieGenreViewModel>>(genresByMovieId);
             var peopleViewModels = this._mapper.Map<IEnumerable<Person>, IEnumerable<MoviePersonViewModel>>(peopleByMovieId);
@@ -49,9 +49,10 @@ namespace NetPhlixDB.Services
             return movieViewModel;
         }
 
-        public string GetMovieTitleById(string id)
+        public async Task<string> GetMovieTitleById(string id)
         {
-            return this._dbContext.Movies.FirstOrDefault(x => x.Id == id).Title;
+            var movie = await this._dbContext.Movies.FirstOrDefaultAsync(x => x.Id == id);
+            return movie.Title;
         }
     }
 }

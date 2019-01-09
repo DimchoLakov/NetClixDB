@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetPhlixDB.Services.Contracts;
 
@@ -14,17 +15,17 @@ namespace NetPhlixDB.Web.Controllers
         }
 
         [Authorize]
-        public IActionResult Details(string id)
+        public async Task<IActionResult> Details(string id)
         {
-            var personViewModel = this._peopleService.GetById(id);
+            var personViewModel = await this._peopleService.GetById(id);
 
             return View(personViewModel);
         }
 
         [Authorize]
-        public IActionResult All()
+        public async Task<IActionResult> All()
         {
-            var people = this._peopleService.GetAll();
+            var people = await this._peopleService.GetAll();
 
             return this.View(people);
         }

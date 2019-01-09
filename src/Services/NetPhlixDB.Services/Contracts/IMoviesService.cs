@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using NetPhlixDb.Data.ViewModels.Movies;
 
 namespace NetPhlixDB.Services.Contracts
 {
     public interface IMoviesService
     {
-        IEnumerable<IndexMovieViewModel> GetAll();
+        Task<IEnumerable<IndexMovieViewModel>> GetAll();
 
-        MovieDetailsViewModel GetById(string id);
+        Task<MovieDetailsViewModel> GetById(string id);
 
-        string GetMovieTitleById(string id);
+        Task<string> GetMovieTitleById(string id);
     }
 }

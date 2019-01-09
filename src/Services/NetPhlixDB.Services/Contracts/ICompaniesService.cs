@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using NetPhlixDb.Data.ViewModels.Companies;
 
 namespace NetPhlixDB.Services.Contracts
 {
     public interface ICompaniesService
     {
-        CompanyViewModel GetCompanyDetails(string id);
+        Task<CompanyViewModel> GetCompanyDetails(string id);
 
-        IEnumerable<CompanyShortViewModel> GetAll();
+        Task<IEnumerable<CompanyShortViewModel>> GetAll();
     }
 }

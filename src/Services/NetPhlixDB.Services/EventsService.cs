@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using NetPhlixDb.Data.ViewModels.Events;
 using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
@@ -21,21 +21,23 @@ namespace NetPhlixDB.Services
             this._mapper = mapper;
         }
 
-        public IEnumerable<EventViewModel> GetAll()
+        public async Task<IEnumerable<EventViewModel>> GetAll()
         {
-            var events = this._dbContext.Events.ToList();
+            var events = await this._dbContext.Events.ToListAsync();
             var eventViewModels = this._mapper.Map<IEnumerable<Event>, IEnumerable<EventViewModel>>(events);
             
             return eventViewModels;
         }
 
-        public EventViewModel GetById(string id)
+        public async Task<EventViewModel> GetById(string id)
         {
-            var ev = this._dbContext.Events.FirstOrDefault(x => x.Id == id);
+            var ev = await this._dbContext.Events.FirstOrDefaultAsync(x => x.Id == id);
             var eventViewModel = this._mapper.Map<Event, EventViewModel>(ev);
-            var movies = this._dbContext.MoviePeople.Where(x => x.EventId == id).Select(x => x.Movie).Distinct();
+
+            var movies = await this._dbContext.MoviePeople.Where(x => x.EventId == id).Select(x => x.Movie).Distinct().ToListAsync();
             var eventMovieViewModels = this._mapper.Map<IEnumerable<Movie>, IEnumerable<EventMovieViewModel>>(movies);
-            var people = this._dbContext.MoviePeople.Where(x => x.EventId == id).Select(x => x.Person).Distinct();
+
+            var people = await this._dbContext.MoviePeople.Where(x => x.EventId == id).Select(x => x.Person).Distinct().ToListAsync();
             var eventPersonViewModels = this._mapper.Map<IEnumerable<Person>, IEnumerable<EventPersonViewModel>>(people);
 
             eventViewModel.EventMovieViewModels = eventMovieViewModels;

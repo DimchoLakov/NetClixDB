@@ -22,21 +22,23 @@ namespace NetPhlixDB.Services
             this._mapper = mapper;
         }
 
-        public List<string> GetFavoriteMoviesList(string email)
+        public async Task<List<string>> GetFavoriteMoviesList(string email)
         {
-            var userId = this.GetUserByEmail(email).Id;
-            var movies = this._dbContext.MovieUsers.Where(x => x.UserId == userId).Select(x => x.Movie.Id).ToList();
+            var user = await this.GetUserByEmail(email);
+            var userId = user.Id;
+            var movies = await this._dbContext.MovieUsers.Where(x => x.UserId == userId).Select(x => x.Movie.Id).ToListAsync();
             return movies;
         }
 
-        public IEnumerable<IndexMovieViewModel> GetFavoriteMovies(string email)
+        public async Task<IEnumerable<IndexMovieViewModel>> GetFavoriteMovies(string email)
         {
-            var userId = this.GetUserByEmail(email).Id;
-            var movies = this._dbContext.MovieUsers.Where(x => x.UserId == userId).Select(x => x.Movie).ToList();
+            var user = await this.GetUserByEmail(email);
+            var userId = user.Id;
+            var movies = await this._dbContext.MovieUsers.Where(x => x.UserId == userId).Select(x => x.Movie).ToListAsync();
             return _mapper.Map<IEnumerable<Movie>, IEnumerable<IndexMovieViewModel>>(movies);
         }
 
-        public async void AddFavoriteMovie(string id, string userId)
+        public async Task AddFavoriteMovie(string id, string userId)
         {
             await this._dbContext.MovieUsers.AddAsync(new MovieUser()
             {
@@ -46,18 +48,18 @@ namespace NetPhlixDB.Services
             await this._dbContext.SaveChangesAsync();
         }
 
-        public UserIdEmailViewModel GetUserByEmail(string email)
+        public async Task<UserIdEmailViewModel> GetUserByEmail(string email)
         {
             var userViewModel =
-               this._mapper.Map<UserIdEmailViewModel>(this._dbContext.Users.FirstOrDefault(x => x.Email == email));
+               this._mapper.Map<UserIdEmailViewModel>(await this._dbContext.Users.FirstOrDefaultAsync(x => x.Email == email));
 
             return userViewModel;
         }
 
-        public UserIdEmailViewModel GetUserById(string id)
+        public async Task<UserIdEmailViewModel> GetUserById(string id)
         {
             var userViewModel =
-                this._mapper.Map<UserIdEmailViewModel>(this._dbContext.Users.FirstOrDefault(x => x.Id == id));
+                this._mapper.Map<UserIdEmailViewModel>(await this._dbContext.Users.FirstOrDefaultAsync(x => x.Id == id));
 
             return userViewModel;
         }

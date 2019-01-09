@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using NetPhlixDB.Services.Contracts;
 
 namespace NetPhlixDB.Web.Controllers
@@ -12,16 +13,16 @@ namespace NetPhlixDB.Web.Controllers
             this._companiesService = companiesService;
         }
 
-        public IActionResult Details(string id)
+        public async Task<IActionResult> Details(string id)
         {
-            var companyDetails = this._companiesService.GetCompanyDetails(id);
+            var companyDetails = await this._companiesService.GetCompanyDetails(id);
 
             return View(companyDetails);
         }
 
-        public IActionResult All()
+        public async Task<IActionResult> All()
         {
-            var allCompanies = this._companiesService.GetAll();
+            var allCompanies = await this._companiesService.GetAll();
             
             return this.View(allCompanies);
         }

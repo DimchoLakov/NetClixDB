@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using NetPhlixDb.Data.ViewModels.Movies;
 using NetPhlixDb.Data.ViewModels.Users;
 
@@ -6,14 +7,14 @@ namespace NetPhlixDB.Services.Contracts
 {
     public interface IUsersService
     {
-        IEnumerable<IndexMovieViewModel> GetFavoriteMovies(string email);
+        Task<IEnumerable<IndexMovieViewModel>> GetFavoriteMovies(string email);
 
-        List<string> GetFavoriteMoviesList(string email);
+        Task<List<string>> GetFavoriteMoviesList(string email);
 
-        void AddFavoriteMovie(string id, string userId);
+        Task AddFavoriteMovie(string id, string userId);
 
-        UserIdEmailViewModel GetUserByEmail(string email);
+        Task<UserIdEmailViewModel> GetUserByEmail(string email);
 
-        UserIdEmailViewModel GetUserById(string id);
+        Task<UserIdEmailViewModel> GetUserById(string id);
     }
 }

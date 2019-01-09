@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetPhlixDb.Data.ViewModels.Binding.Users;
@@ -17,31 +18,31 @@ namespace NetPhlixDB.Web.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult AddFavMovie(FavoriteMovieIdViewModel viewModel)
+        public async Task<IActionResult> AddFavMovie(FavoriteMovieIdViewModel viewModel)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.RedirectToAction("All", "Movies");
             }
 
-            var user = this._usersService.GetUserByEmail(this.User.Identity.Name);
-            this._usersService.AddFavoriteMovie(viewModel.Id, user.Id);
+            var user = await this._usersService.GetUserByEmail(this.User.Identity.Name);
+            await this._usersService.AddFavoriteMovie(viewModel.Id, user.Id);
 
             return RedirectToAction("Favorites", "Users");
         }
 
         [Authorize]
-        public IActionResult Favorites()
+        public async Task<IActionResult> Favorites()
         {
-            var favoriteMovies = this._usersService.GetFavoriteMovies(this.User.Identity.Name).ToList();
+            var favoriteMovies = await this._usersService.GetFavoriteMovies(this.User.Identity.Name);
 
-            return this.View(favoriteMovies);
+            return this.View(favoriteMovies.ToList());
         }
 
         [Authorize]
-        public IActionResult Details(string id)
+        public async Task<IActionResult> Details(string id)
         {
-            return this.View();
+            return await Task.Run(() => this.View());
         }
     }
 }
