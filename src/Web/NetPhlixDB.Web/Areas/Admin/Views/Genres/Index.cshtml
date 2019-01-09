@@ -1,4 +1,4 @@
-﻿@model IEnumerable<NetPhlixDb.Data.ViewModels.Binding.Admin.Movies.IndexAdminMovieViewModel>
+﻿@model IEnumerable<NetPhlixDb.Data.ViewModels.Binding.Admin.Genres.IndexGenreViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,13 +13,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.GenreType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateReleased)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MovieType)
+                @Html.DisplayNameFor(model => model.Poster)
             </th>
             <th></th>
         </tr>
@@ -28,13 +25,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                @Html.DisplayFor(modelItem => item.GenreType)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateReleased)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MovieType)
+                @Html.DisplayFor(modelItem => item.Poster)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

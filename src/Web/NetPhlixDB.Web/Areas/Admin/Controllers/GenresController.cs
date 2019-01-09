@@ -1,37 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using NetPhlixDb.Data.ViewModels.Binding.Admin.Movies;
-using NetPhlixDb.Data.ViewModels.Binding.Movies;
+using NetPhlixDb.Data.ViewModels.Binding.Admin.Genres;
 using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
-using NetPhlixDB.Web.Extensions;
 
 namespace NetPhlixDB.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class MoviesController : Controller
+    public class GenresController : Controller
     {
-        private readonly NetPhlixDbContext _dbContext;
+        private readonly NetPhlixDbContext _context;
         private readonly IMapper _mapper;
 
-        public MoviesController(NetPhlixDbContext dbContext, IMapper mapper)
+        public GenresController(NetPhlixDbContext context, IMapper mapper)
         {
-            this._dbContext = dbContext;
-            this._mapper = mapper;
+            _context = context;
+            _mapper = mapper;
         }
 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            var movies = await _dbContext.Movies.OrderByDescending(x => x.DateReleased).ToListAsync();
-            var movieViewModels = this._mapper.Map<IEnumerable<Movie>, IEnumerable<IndexAdminMovieViewModel>>(movies);
-
-            return View(movieViewModels);
+            var genres = await _context.Genres.OrderBy(x => x.GenreType.ToString()).ToListAsync();
+            var genreViewModels = this._mapper.Map<IEnumerable<Genre>, IEnumerable<IndexGenreViewModel>>(genres);
+            return View(genreViewModels);
         }
 
         [Authorize(Roles = "Admin")]
@@ -42,14 +41,16 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var movie = await _dbContext.Movies
+            var genre = await _context.Genres
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            if (genre == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            var genreViewModel = this._mapper.Map<Genre, EditDeleteDetailsGenreViewModel>(genre);
+
+            return View(genreViewModel);
         }
 
         [Authorize(Roles = "Admin")]
@@ -60,19 +61,14 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> Create(CreateMovieViewModel viewModel)
+        public async Task<IActionResult> Create(CreateGenreViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                var trailer = viewModel.Trailer.UrlToEmbedCode();
-                if (trailer == null)
-                {
-                    return View(viewModel);
-                }
-                var movie = this._mapper.Map<CreateMovieViewModel, Movie>(viewModel);
-                movie.Trailer = trailer;
-                _dbContext.Add(movie);
-                await _dbContext.SaveChangesAsync();
+                var genre = this._mapper.Map<CreateGenreViewModel, Genre>(viewModel);
+
+                _context.Add(genre);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(viewModel);
@@ -86,20 +82,20 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var movie = await _dbContext.Movies.FindAsync(id);
-            if (movie == null)
+            var genre = await _context.Genres.FindAsync(id);
+            if (genre == null)
             {
                 return NotFound();
             }
 
-            var movieViewModel = this._mapper.Map<Movie, EditMovieViewModel>(movie);
+            var genreViewModel = this._mapper.Map<Genre, EditDeleteDetailsGenreViewModel>(genre);
 
-            return View(movieViewModel);
+            return View(genreViewModel);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, EditMovieViewModel viewModel)
+        public async Task<IActionResult> Edit(string id, EditDeleteDetailsGenreViewModel viewModel)
         {
             if (id != viewModel.Id)
             {
@@ -108,16 +104,15 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                var movie = this._mapper.Map<EditMovieViewModel, Movie>(viewModel);
-
+                var genre = this._mapper.Map<EditDeleteDetailsGenreViewModel, Genre>(viewModel);
                 try
                 {
-                    _dbContext.Update(movie);
-                    await _dbContext.SaveChangesAsync();
+                    _context.Update(genre);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MovieExists(movie.Id))
+                    if (!GenreExists(genre.Id))
                     {
                         return NotFound();
                     }
@@ -139,29 +134,31 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var movie = await _dbContext.Movies
+            var genre = await _context.Genres
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            if (genre == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            var genreViewModel = this._mapper.Map<Genre, EditDeleteDetailsGenreViewModel>(genre);
+
+            return View(genreViewModel);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var movie = await _dbContext.Movies.FindAsync(id);
-            _dbContext.Movies.Remove(movie);
-            await _dbContext.SaveChangesAsync();
+            var genre = await _context.Genres.FindAsync(id);
+            _context.Genres.Remove(genre);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MovieExists(string id)
+        private bool GenreExists(string id)
         {
-            return _dbContext.Movies.Any(e => e.Id == id);
+            return _context.Genres.Any(e => e.Id == id);
         }
     }
 }

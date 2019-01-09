@@ -19,9 +19,9 @@
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Storyline" class="col-form-label"></label>
-                    <input asp-for="Storyline" class="form-control" />
-                    <span asp-validation-for="Storyline" class="text-danger"></span>
+                    <label asp-for="MovieType" class="col-form-label"></label>
+                    <select asp-for="MovieType" asp-items="Html.GetEnumSelectList<MovieType>()" class="form-control"></select>
+                    <span asp-validation-for="MovieType" class="text-danger"></span>
                 </div>
             </div>
             <div class="col">
@@ -63,7 +63,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row w-50 mx-auto">
             <div class="col">
                 <div class="form-group">
                     <label asp-for="Rating" class="col-form-label"></label>
@@ -71,11 +71,14 @@
                     <span asp-validation-for="Rating" class="text-danger"></span>
                 </div>
             </div>
+        </div>
+        <div class="row w-75 mx-auto">
             <div class="col">
                 <div class="form-group">
-                    <label asp-for="MovieType" class="col-form-label"></label>
-                    <select asp-for="MovieType" asp-items="Html.GetEnumSelectList<MovieType>()" class="form-control"></select>
-                    <span asp-validation-for="MovieType" class="text-danger"></span>
+                    <label asp-for="Storyline" class="col-form-label"></label>
+                    @*<input asp-for="Storyline" class="form-control" />*@
+                    <textarea asp-for="Storyline" class="form-control"></textarea>
+                    <span asp-validation-for="Storyline" class="text-danger"></span>
                 </div>
             </div>
         </div>

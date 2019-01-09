@@ -5,33 +5,31 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NetPhlixDb.Data.ViewModels.Binding.Admin.Movies;
-using NetPhlixDb.Data.ViewModels.Binding.Movies;
+using NetPhlixDb.Data.ViewModels.Binding.Admin.Companies;
 using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
-using NetPhlixDB.Web.Extensions;
 
 namespace NetPhlixDB.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class MoviesController : Controller
+    public class CompaniesController : Controller
     {
-        private readonly NetPhlixDbContext _dbContext;
+        private readonly NetPhlixDbContext _context;
         private readonly IMapper _mapper;
 
-        public MoviesController(NetPhlixDbContext dbContext, IMapper mapper)
+        public CompaniesController(NetPhlixDbContext context, IMapper mapper)
         {
-            this._dbContext = dbContext;
-            this._mapper = mapper;
+            _context = context;
+            _mapper = mapper;
         }
 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            var movies = await _dbContext.Movies.OrderByDescending(x => x.DateReleased).ToListAsync();
-            var movieViewModels = this._mapper.Map<IEnumerable<Movie>, IEnumerable<IndexAdminMovieViewModel>>(movies);
-
-            return View(movieViewModels);
+            var companies = await _context.Companies.OrderByDescending(x => x.CreatedOn).ToListAsync();
+            var companyViewModels =
+                this._mapper.Map<IEnumerable<Company>, IEnumerable<IndexCompanyViewModel>>(companies);
+            return View(companyViewModels);
         }
 
         [Authorize(Roles = "Admin")]
@@ -42,14 +40,16 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var movie = await _dbContext.Movies
+            var company = await _context.Companies
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            if (company == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            var companyViewModel = this._mapper.Map<Company, EditDeleteDetailsCompanyViewModel>(company);
+
+            return View(companyViewModel);
         }
 
         [Authorize(Roles = "Admin")]
@@ -60,19 +60,14 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> Create(CreateMovieViewModel viewModel)
+        public async Task<IActionResult> Create(CreateCompanyViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                var trailer = viewModel.Trailer.UrlToEmbedCode();
-                if (trailer == null)
-                {
-                    return View(viewModel);
-                }
-                var movie = this._mapper.Map<CreateMovieViewModel, Movie>(viewModel);
-                movie.Trailer = trailer;
-                _dbContext.Add(movie);
-                await _dbContext.SaveChangesAsync();
+                var company = this._mapper.Map<CreateCompanyViewModel, Company>(viewModel);
+
+                _context.Add(company);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(viewModel);
@@ -86,20 +81,20 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var movie = await _dbContext.Movies.FindAsync(id);
-            if (movie == null)
+            var company = await _context.Companies.FindAsync(id);
+            if (company == null)
             {
                 return NotFound();
             }
 
-            var movieViewModel = this._mapper.Map<Movie, EditMovieViewModel>(movie);
+            var editDeleteViewModel = this._mapper.Map<Company, EditDeleteDetailsCompanyViewModel>(company);
 
-            return View(movieViewModel);
+            return View(editDeleteViewModel);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, EditMovieViewModel viewModel)
+        public async Task<IActionResult> Edit(string id, EditDeleteDetailsCompanyViewModel viewModel)
         {
             if (id != viewModel.Id)
             {
@@ -108,16 +103,16 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                var movie = this._mapper.Map<EditMovieViewModel, Movie>(viewModel);
+                var company = this._mapper.Map<EditDeleteDetailsCompanyViewModel, Company>(viewModel);
 
                 try
                 {
-                    _dbContext.Update(movie);
-                    await _dbContext.SaveChangesAsync();
+                    _context.Update(company);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MovieExists(movie.Id))
+                    if (!CompanyExists(company.Id))
                     {
                         return NotFound();
                     }
@@ -139,29 +134,31 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var movie = await _dbContext.Movies
+            var company = await _context.Companies
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            if (company == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            var companyViewModel = this._mapper.Map<Company, EditDeleteDetailsCompanyViewModel>(company);
+
+            return View(companyViewModel);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var movie = await _dbContext.Movies.FindAsync(id);
-            _dbContext.Movies.Remove(movie);
-            await _dbContext.SaveChangesAsync();
+            var company = await _context.Companies.FindAsync(id);
+            _context.Companies.Remove(company);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MovieExists(string id)
+        private bool CompanyExists(string id)
         {
-            return _dbContext.Movies.Any(e => e.Id == id);
+            return _context.Companies.Any(e => e.Id == id);
         }
     }
 }
