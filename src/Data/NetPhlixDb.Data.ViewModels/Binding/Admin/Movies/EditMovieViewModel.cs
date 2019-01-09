@@ -2,20 +2,23 @@
 using System.ComponentModel.DataAnnotations;
 using NetPhlixDB.Data.Models.Enums;
 
-namespace NetPhlixDb.Data.ViewModels.Binding.Movies
+namespace NetPhlixDb.Data.ViewModels.Binding.Admin.Movies
 {
-    public class CreateMovieViewModel
+    public class EditMovieViewModel
     {
         [Required]
+        public string Id { get; set; }
+
+        [Required]
         [Display(Name = "Title")]
-        [DataType(DataType.Text)]
         [StringLength(maximumLength: 200, ErrorMessage = "The {0} must be between {2} and {1} characters long.", MinimumLength = 2)]
+        [DataType(DataType.Text)]
         public string Title { get; set; }
 
         [Required]
         [Display(Name = "Storyline")]
-        [DataType(DataType.Text)]
         [StringLength(maximumLength: 5000, ErrorMessage = "The {0} must be between {2} and {1} characters long.", MinimumLength = 10)]
+        [DataType(DataType.Text)]
         public string Storyline { get; set; }
 
         [Required]
@@ -34,22 +37,21 @@ namespace NetPhlixDb.Data.ViewModels.Binding.Movies
 
         [Required]
         [Display(Name = "Date Released")]
-        [DataType(DataType.DateTime)]
+        [DataType(DataType.Date)]
         public DateTime DateReleased { get; set; }
 
         [Required]
         [Display(Name = "Production Cost")]
         [DataType(DataType.Currency)]
-        [Range(typeof(decimal), "0", "79228162514264337593543950335")]
         public decimal ProductionCost { get; set; }
 
         [Required]
-        [Display(Name = "Movie Length (min)")]
+        [Display(Name = "Duration")]
         public int Duration { get; set; }
 
         [Required]
-        [Display(Name = "Rating")]
-        [Range(typeof(double), "1", "10")]
+        [Display(Name = "Duration")]
+        [Range(minimum: 1, maximum: 10)]
         public double Rating { get; set; }
 
         [Required]
