@@ -13,6 +13,7 @@ using NetPhlixDB.Data.Models;
 using NetPhlixDB.Services;
 using NetPhlixDB.Services.Contracts;
 using NetPhlixDB.Services.Mapping.Profiles;
+using NetPhlixDB.Services.Mapping.Profiles.Admin;
 using NetPhlixDB.Web.Middlewares;
 
 namespace NetPhlixDB.Web
@@ -68,7 +69,8 @@ namespace NetPhlixDB.Web
                         typeof(CompaniesProfile),
                         typeof(ReviewsProfile),
                         typeof(PeopleProfile),
-                        typeof(EventsProfile)
+                        typeof(EventsProfile),
+                        typeof(AdminProfile)
                     );
                 });
             IMapper mapper = mappingConfig.CreateMapper();
@@ -86,6 +88,16 @@ namespace NetPhlixDB.Web
         {
             env.EnvironmentName = EnvironmentName.Development;
             //env.EnvironmentName = EnvironmentName.Production;
+
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<NetPhlixDbContext>();
+
+                if (env.IsDevelopment())
+                {
+                    dbContext.Database.Migrate();
+                }
+            }
 
             if (env.IsDevelopment())
             {
