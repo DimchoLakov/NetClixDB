@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -6,7 +7,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
 using NetPhlixDB.Web.Common;
 
@@ -19,17 +22,20 @@ namespace NetPhlixDB.Web.Areas.Identity.Pages.Account
         private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        
+        private readonly NetPhlixDbContext _dbContext;
+
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            NetPhlixDbContext dbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _dbContext = dbContext;
         }
 
         [BindProperty]
@@ -63,15 +69,21 @@ namespace NetPhlixDB.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            var role = UserRole.User.ToString();
+
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
+                if (!await this._dbContext.Users.AnyAsync())
+                {
+                    role = UserRole.Admin.ToString();
+                }
                 var user = new User { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                    await _userManager.AddToRoleAsync(user, UserRole.User.ToString());
+                    await _userManager.AddToRoleAsync(user, role);
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Page(
