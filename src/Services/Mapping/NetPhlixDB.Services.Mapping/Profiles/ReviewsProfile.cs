@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using NetPhlixDb.Data.ViewModels.Binding.Reviews;
+using NetPhlixDb.Data.ViewModels.Reviews;
 using NetPhlixDB.Data.Models;
 
 namespace NetPhlixDB.Services.Mapping.Profiles

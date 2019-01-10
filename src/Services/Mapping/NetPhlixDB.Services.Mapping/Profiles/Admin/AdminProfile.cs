@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
-using NetPhlixDb.Data.ViewModels.Binding.Admin.Companies;
-using NetPhlixDb.Data.ViewModels.Binding.Admin.Genres;
-using NetPhlixDb.Data.ViewModels.Binding.Admin.Movies;
-using NetPhlixDb.Data.ViewModels.Binding.Admin.Users;
+using NetPhlixDb.Data.ViewModels.Admin.Companies;
+using NetPhlixDb.Data.ViewModels.Admin.Genres;
+using NetPhlixDb.Data.ViewModels.Admin.Movies;
+using NetPhlixDb.Data.ViewModels.Admin.People;
+using NetPhlixDb.Data.ViewModels.Admin.Users;
 using NetPhlixDB.Data.Models;
 
 namespace NetPhlixDB.Services.Mapping.Profiles.Admin
@@ -14,7 +15,7 @@ namespace NetPhlixDB.Services.Mapping.Profiles.Admin
             // Index Movie View Model
             CreateMap<Movie, IndexAdminMovieViewModel>()
                 .ReverseMap();
-
+            
             // Edit Delete Movie View Model
             CreateMap<Movie, EditMovieViewModel>()
                 .ReverseMap();
@@ -49,6 +50,23 @@ namespace NetPhlixDB.Services.Mapping.Profiles.Admin
 
             // User View Model
             CreateMap<User, UserViewModel>()
+                .ReverseMap();
+
+            // Index Person View Model
+            CreateMap<Person, IndexPersonViewModel>()
+                .ForMember(dest => dest.FullName,
+                    mapFrom => mapFrom.MapFrom(src => src.FirstName + " " + src.LastName));
+
+            // Create Person View Model
+            CreateMap<Person, CreatePersonViewModel>()
+                .ReverseMap();
+
+            // Edit Person View Model
+            CreateMap<Person, EditPersonViewModel>()
+                .ReverseMap();
+
+            // Movie Add Genre View Model
+            CreateMap<Movie, MovieAddGenreViewModel>()
                 .ReverseMap();
         }
     }

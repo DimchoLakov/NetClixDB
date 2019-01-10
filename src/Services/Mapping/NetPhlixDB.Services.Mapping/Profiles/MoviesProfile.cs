@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using AutoMapper;
-using NetPhlixDb.Data.ViewModels.Binding.Movies;
+using NetPhlixDb.Data.ViewModels.Admin.Movies;
 using NetPhlixDb.Data.ViewModels.Movies;
 using NetPhlixDB.Data.Models;
 
