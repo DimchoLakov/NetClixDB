@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NetPhlixDb.Data.ViewModels.Binding.Users
+namespace NetPhlixDb.Data.ViewModels.Users
 {
     public class FavoriteMovieIdViewModel
     {

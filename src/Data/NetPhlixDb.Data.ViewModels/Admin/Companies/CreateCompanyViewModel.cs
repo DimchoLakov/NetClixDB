@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace NetPhlixDb.Data.ViewModels.Binding.Admin.Companies
+namespace NetPhlixDb.Data.ViewModels.Admin.Companies
 {
     public class CreateCompanyViewModel
     {

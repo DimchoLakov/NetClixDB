@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using NetPhlixDb.Data.ViewModels.Movies;
 
-namespace NetPhlixDb.Data.ViewModels.Binding.Reviews
+namespace NetPhlixDb.Data.ViewModels.Reviews
 {
     public class ReviewsMovieAddReviewViewModel
     {

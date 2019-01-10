@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using NetPhlixDB.Data.Models.Enums;
 
-namespace NetPhlixDb.Data.ViewModels.Binding.Movies
+namespace NetPhlixDb.Data.ViewModels.Admin.Movies
 {
     public class CreateMovieViewModel
     {

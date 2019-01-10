@@ -1,4 +1,4 @@
-﻿namespace NetPhlixDb.Data.ViewModels.Binding.Admin.Users
+﻿namespace NetPhlixDb.Data.ViewModels.Admin.Users
 {
     public class UserIdViewModel
     {

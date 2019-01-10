@@ -1,16 +1,15 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace NetPhlixDb.Data.ViewModels.Binding.Admin.Companies
+namespace NetPhlixDb.Data.ViewModels.Admin.Companies
 {
-    public class EditDeleteDetailsCompanyViewModel
+    public class IndexCompanyViewModel
     {
         [Required]
         public string Id { get; set; }
 
         [Required]
         [Display(Name = "Name")]
-        [StringLength(maximumLength: 200, ErrorMessage = "The {0} must be between {2} and {1} characters long.", MinimumLength = 2)]
         public string Name { get; set; }
 
         [Required]
@@ -20,7 +19,6 @@ namespace NetPhlixDb.Data.ViewModels.Binding.Admin.Companies
 
         [Required]
         [Display(Name = "Details")]
-        [StringLength(maximumLength: 1000, ErrorMessage = "The {0} must be between {2} and {1} characters long.", MinimumLength = 2)]
         [DataType(DataType.Text)]
         public string Details { get; set; }
 

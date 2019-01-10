@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NetPhlixDb.Data.ViewModels.Binding.Reviews
+namespace NetPhlixDb.Data.ViewModels.Reviews
 {
     public class AddReviewViewModel
     {
