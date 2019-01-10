@@ -38,14 +38,19 @@ namespace NetPhlixDB.Services
             return _mapper.Map<IEnumerable<Movie>, IEnumerable<IndexMovieViewModel>>(movies);
         }
 
-        public async Task AddFavoriteMovie(string id, string userId)
+        public async Task<int> AddFavoriteMovie(string id, string userId)
         {
+            var movie = await this._dbContext.Movies.FirstOrDefaultAsync(x => x.Id == id);
+            if (movie == null)
+            {
+                return 0;
+            }
             await this._dbContext.MovieUsers.AddAsync(new MovieUser()
             {
                 MovieId = id,
                 UserId = userId
             });
-            await this._dbContext.SaveChangesAsync();
+            return await this._dbContext.SaveChangesAsync();
         }
 
         public async Task<UserIdEmailViewModel> GetUserByEmail(string email)

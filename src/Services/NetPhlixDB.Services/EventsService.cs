@@ -23,7 +23,7 @@ namespace NetPhlixDB.Services
 
         public async Task<IEnumerable<EventViewModel>> GetAll()
         {
-            var events = await this._dbContext.Events.ToListAsync();
+            var events = await this._dbContext.Events.OrderByDescending(x => x.Date).ToListAsync();
             var eventViewModels = this._mapper.Map<IEnumerable<Event>, IEnumerable<EventViewModel>>(events);
             
             return eventViewModels;
@@ -32,6 +32,10 @@ namespace NetPhlixDB.Services
         public async Task<EventViewModel> GetById(string id)
         {
             var ev = await this._dbContext.Events.FirstOrDefaultAsync(x => x.Id == id);
+            if (ev == null)
+            {
+                return null;
+            }
             var eventViewModel = this._mapper.Map<Event, EventViewModel>(ev);
 
             var movies = await this._dbContext.MoviePeople.Where(x => x.EventId == id).Select(x => x.Movie).Distinct().ToListAsync();

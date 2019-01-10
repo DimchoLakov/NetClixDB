@@ -24,6 +24,10 @@ namespace NetPhlixDB.Services
         public async Task<CompanyViewModel> GetCompanyDetails(string id)
         {
             var company = await this._dbContext.Companies.FirstOrDefaultAsync(x => x.Id == id);
+            if (company == null)
+            {
+                return null;
+            }
             var companyViewModel = this._mapper.Map<Company, CompanyViewModel>(company);
             var companyMovies = await this._dbContext.MovieCompanies.Where(x => x.CompanyId == id).Select(x => x.Movie).ToListAsync();
             var companyMoviesViewModels = this._mapper.Map<IEnumerable<Movie>, IEnumerable<CompanyMovieViewModel>>(companyMovies);
@@ -35,7 +39,7 @@ namespace NetPhlixDB.Services
 
         public async Task<IEnumerable<CompanyShortViewModel>> GetAll()
         {
-            var companies = await this._dbContext.Companies.ToListAsync();
+            var companies = await this._dbContext.Companies.OrderBy(x => x.Name).ToListAsync();
             var allCompanies = this._mapper.Map<IEnumerable<Company>, IEnumerable<CompanyShortViewModel>>(companies);
             return allCompanies;
         }

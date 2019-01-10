@@ -32,6 +32,10 @@ namespace NetPhlixDB.Services
         public async Task<PersonViewModel> GetById(string id)
         {
             var person = await this._dbContext.People.FirstOrDefaultAsync(x => x.Id == id);
+            if (person == null)
+            {
+                return null;
+            }
             var personViewModel = this._mapper.Map<Person, PersonViewModel>(person);
 
             var personMovies = await this._dbContext.MoviePeople.Where(x => x.PersonId == id).Select(x => x.Movie).ToListAsync();

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using NetPhlixDb.Data.ViewModels.Binding.Reviews;
 using NetPhlixDb.Data.ViewModels.Movies;
+using NetPhlixDb.Data.ViewModels.Reviews;
 using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
 using NetPhlixDB.Services.Contracts;
@@ -27,6 +27,10 @@ namespace NetPhlixDB.Services
 
         public async Task<ReviewsMovieAddReviewViewModel> AllReviewsForMovie(string movieId)
         {
+            if (!this.MovieExists(movieId).Result)
+            {
+                return null;
+            }
             var reviews = await this._dbContext.Movies
                                                 .Where(x => x.Id == movieId)
                                                 .SelectMany(x => x.Reviews)
@@ -57,6 +61,11 @@ namespace NetPhlixDB.Services
             review.DateAdded = DateTime.UtcNow;
             await this._dbContext.Reviews.AddAsync(review);
             await this._dbContext.SaveChangesAsync();
+        }
+
+        private async Task<bool> MovieExists(string movieId)
+        {
+            return await this._dbContext.Movies.FirstOrDefaultAsync(x => x.Id == movieId) != null;
         }
     }
 }

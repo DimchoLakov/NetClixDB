@@ -30,6 +30,10 @@ namespace NetPhlixDB.Services
         public async Task<MovieDetailsViewModel> GetById(string id)
         {
             var movieById = await this._dbContext.Movies.FirstOrDefaultAsync(x => x.Id == id);
+            if (movieById == null)
+            {
+                return null;
+            }
             var genresByMovieId = await this._dbContext.MovieGenres.Where(x => x.MovieId == id).Select(x => x.Genre).ToListAsync();
             var peopleByMovieId = await this._dbContext.MoviePeople.Where(x => x.MovieId == id).Select(x => x.Person).ToListAsync();
             var companiesByMovieId = await this._dbContext.MovieCompanies.Where(x => x.MovieId == id).Select(x => x.Company).ToListAsync();

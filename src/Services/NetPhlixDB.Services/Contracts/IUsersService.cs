@@ -11,7 +11,7 @@ namespace NetPhlixDB.Services.Contracts
 
         Task<List<string>> GetFavoriteMoviesList(string email);
 
-        Task AddFavoriteMovie(string id, string userId);
+        Task<int> AddFavoriteMovie(string id, string userId);
 
         Task<UserIdEmailViewModel> GetUserByEmail(string email);
 
