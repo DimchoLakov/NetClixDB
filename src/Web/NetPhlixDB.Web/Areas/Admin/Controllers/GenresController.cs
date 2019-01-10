@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using NetPhlixDb.Data.ViewModels.Binding.Admin.Genres;
+using NetPhlixDb.Data.ViewModels.Admin.Genres;
 using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
 

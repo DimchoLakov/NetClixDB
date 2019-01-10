@@ -5,7 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NetPhlixDb.Data.ViewModels.Binding.Admin.Companies;
+using NetPhlixDb.Data.ViewModels.Admin.Companies;
 using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
 
