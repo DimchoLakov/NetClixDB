@@ -21,7 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetPhlixDb.Data.ViewModels"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mapping", "Mapping", "{6D01E831-7C41-4571-B767-153F03912049}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetPhlixDB.Services.Mapping", "Services\Mapping\NetPhlixDB.Services.Mapping\NetPhlixDB.Services.Mapping.csproj", "{A541C80E-00B1-4E3B-9192-380C68901273}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetPhlixDB.Services.Mapping", "Services\Mapping\NetPhlixDB.Services.Mapping\NetPhlixDB.Services.Mapping.csproj", "{A541C80E-00B1-4E3B-9192-380C68901273}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{69510822-DB2B-47C2-BF5F-55CBF12EFD32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetPhlixDB.Tests", "Tests\NetPhlixDB.Tests\NetPhlixDB.Tests.csproj", "{C5ECC21A-501C-426C-8F94-01EA3DFBDFDE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +57,10 @@ Global
 		{A541C80E-00B1-4E3B-9192-380C68901273}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A541C80E-00B1-4E3B-9192-380C68901273}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A541C80E-00B1-4E3B-9192-380C68901273}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5ECC21A-501C-426C-8F94-01EA3DFBDFDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5ECC21A-501C-426C-8F94-01EA3DFBDFDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5ECC21A-501C-426C-8F94-01EA3DFBDFDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5ECC21A-501C-426C-8F94-01EA3DFBDFDE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +73,7 @@ Global
 		{31ED0DCF-194D-4BFB-9FEB-5C358D9632E4} = {C6D09BA8-9F58-4FE5-8C61-721F3FED649B}
 		{6D01E831-7C41-4571-B767-153F03912049} = {B5FA253C-E22D-45BD-817B-4FCB2D5CFFD0}
 		{A541C80E-00B1-4E3B-9192-380C68901273} = {6D01E831-7C41-4571-B767-153F03912049}
+		{C5ECC21A-501C-426C-8F94-01EA3DFBDFDE} = {69510822-DB2B-47C2-BF5F-55CBF12EFD32}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {29C5B931-A7EC-4102-A209-D447CDB0B28A}
