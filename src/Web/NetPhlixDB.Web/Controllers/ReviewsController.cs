@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NetPhlixDb.Data.ViewModels.Binding.Reviews;
+using NetPhlixDb.Data.ViewModels.Reviews;
 using NetPhlixDB.Services;
 using NetPhlixDB.Services.Contracts;
 
@@ -37,6 +37,10 @@ namespace NetPhlixDB.Web.Controllers
         public async Task<IActionResult> Movie(string id)
         {
             var reviewsForMovie = await this._reviewsService.AllReviewsForMovie(id);
+            if (reviewsForMovie == null)
+            {
+                return this.NotFound();
+            }
             reviewsForMovie.MovieId = id;
 
             var user = await this._usersService.GetUserByEmail(this.User.Identity.Name);

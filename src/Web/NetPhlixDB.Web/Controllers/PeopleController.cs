@@ -19,6 +19,11 @@ namespace NetPhlixDB.Web.Controllers
         {
             var personViewModel = await this._peopleService.GetById(id);
 
+            if (personViewModel == null)
+            {
+                return this.NotFound();
+            }
+
             return View(personViewModel);
         }
 

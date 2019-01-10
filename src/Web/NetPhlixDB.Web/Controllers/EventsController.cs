@@ -26,6 +26,11 @@ namespace NetPhlixDB.Web.Controllers
         {
             var ev = await this._eventsService.GetById(id);
 
+            if (ev == null)
+            {
+                return this.NotFound();
+            }
+
             return this.View(ev);
         }
     }
