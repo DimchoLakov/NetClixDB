@@ -5,8 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NetPhlixDb.Data.ViewModels.Binding.Admin.Movies;
-using NetPhlixDb.Data.ViewModels.Binding.Movies;
+using NetPhlixDb.Data.ViewModels.Admin.Movies;
 using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
 using NetPhlixDB.Web.Extensions;
@@ -109,7 +108,7 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var movie = this._mapper.Map<EditMovieViewModel, Movie>(viewModel);
-
+                movie.Trailer = movie.Trailer.UrlToEmbedCode();
                 try
                 {
                     _dbContext.Update(movie);
@@ -162,6 +161,48 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
         private bool MovieExists(string id)
         {
             return _dbContext.Movies.Any(e => e.Id == id);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AddGenre(string id)
+        {
+            if (!MovieExists(id))
+            {
+                return this.NotFound();
+            }
+
+            var movie = await this._dbContext.Movies.FindAsync(id);
+            var movieGenresViewModel = this._mapper.Map<Movie, MovieAddGenreViewModel>(movie);
+
+            return await Task.Run(() => this.View(movieGenresViewModel));
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AddGenre(MovieAddGenreViewModel viewModel)
+        {
+            if (!this.MovieExists(viewModel.Id))
+            {
+                return this.NotFound();
+            }
+
+            if (this.ModelState.IsValid)
+            {
+                var genre = await this._dbContext.Genres.FirstOrDefaultAsync(x => x.GenreType == viewModel.GenreType);
+                var movieGenre = new MovieGenre()
+                {
+                    MovieId = viewModel.Id,
+                    Genre = genre
+                };
+                var movie = await this._dbContext.Movies.FindAsync(viewModel.Id);
+                movie.MovieGenres.Add(movieGenre);
+                this._dbContext.Update(movie);
+                await _dbContext.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return this.View(viewModel);
         }
     }
 }
