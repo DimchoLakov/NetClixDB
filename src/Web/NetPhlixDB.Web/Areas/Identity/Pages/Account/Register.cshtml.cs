@@ -51,6 +51,11 @@ namespace NetPhlixDB.Web.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
+            [RegularExpression("^[-0-9A-Za-z_]{5,20}$", ErrorMessage = "Username can only contain characters like A-Z, a-z, digit. Min-5, Max-20 characters.")]
+            [Display(Name = "Username")]
+            public string UserName { get; set; }
+
+            [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
@@ -78,7 +83,8 @@ namespace NetPhlixDB.Web.Areas.Identity.Pages.Account
                 {
                     role = UserRole.Admin.ToString();
                 }
-                var user = new User { UserName = Input.Email, Email = Input.Email };
+                var user = new User { UserName = Input.UserName, Email = Input.Email };
+                user.Avatar = "/images/user_avatar.png";
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
