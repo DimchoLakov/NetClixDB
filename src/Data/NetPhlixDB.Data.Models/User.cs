@@ -23,6 +23,8 @@
 
         public string Avatar { get; set; }
 
+        public override string UserName { get; set; }
+
         public virtual ICollection<MovieUser> FavoriteMovies { get; set; }
 
         public virtual ICollection<Review> Reviews { get; set; }
