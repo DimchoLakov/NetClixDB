@@ -21,6 +21,10 @@ namespace NetPhlixDB.Services.Mapping.Profiles
             CreateMap<Movie, EventMovieViewModel>()
                 .ForMember(dest => dest.Date,
                     mapFrom => mapFrom.MapFrom(src => src.DateReleased.Year));
+
+            // Create Event View Model
+            CreateMap<Event, CreateEventViewModel>()
+                .ReverseMap();
         }
     }
 }

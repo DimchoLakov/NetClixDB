@@ -2,6 +2,7 @@
 using AutoMapper;
 using NetPhlixDb.Data.ViewModels.Admin.Movies;
 using NetPhlixDb.Data.ViewModels.Movies;
+using NetPhlixDb.Data.ViewModels.People;
 using NetPhlixDB.Data.Models;
 
 namespace NetPhlixDB.Services.Mapping.Profiles
@@ -51,7 +52,7 @@ namespace NetPhlixDB.Services.Mapping.Profiles
 
             // Movie Review View Model
             CreateMap<Review, MovieReviewViewModel>()
-                .ForMember(dest => dest.UserName, mapFrom => mapFrom.MapFrom(src => src.User.FirstName + " " + src.User.LastName))
+                .ForMember(dest => dest.UserName, mapFrom => mapFrom.MapFrom(src => src.User.UserName))
                 .ForMember(dest => dest.UserAvatar, mapFrom => mapFrom.MapFrom(src => src.User.Avatar));
 
             // Create Movie View Model
