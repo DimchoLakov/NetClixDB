@@ -7,14 +7,16 @@ namespace NetPhlixDB.Services.Contracts
 {
     public interface IUsersService
     {
-        Task<IEnumerable<IndexMovieViewModel>> GetFavoriteMovies(string email);
+        Task<IEnumerable<IndexMovieViewModel>> GetFavoriteMovies(string username);
 
-        Task<List<string>> GetFavoriteMoviesList(string email);
+        Task<List<string>> GetFavoriteMoviesList(string username);
 
         Task<int> AddFavoriteMovie(string id, string userId);
 
-        Task<UserIdEmailViewModel> GetUserByEmail(string email);
+        Task<UserIdEmailViewModel> GetUserByUsername(string username);
 
         Task<UserIdEmailViewModel> GetUserById(string id);
+
+        Task<int> RemoveFavoriteMovie(string id, string userId);
     }
 }

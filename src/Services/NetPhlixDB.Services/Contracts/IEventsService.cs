@@ -9,5 +9,7 @@ namespace NetPhlixDB.Services.Contracts
         Task<IEnumerable<EventViewModel>> GetAll();
 
         Task<EventViewModel> GetById(string id);
+
+        Task<int> CreateEvent(CreateEventViewModel viewModel);
     }
 }
