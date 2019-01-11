@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetPhlixDb.Data.ViewModels.People;
 using NetPhlixDb.Data.ViewModels.Users;
+using NetPhlixDB.Data.Models;
 using NetPhlixDB.Services.Contracts;
 using NetPhlixDB.Web.Common;
 
@@ -14,11 +16,13 @@ namespace NetPhlixDB.Web.Controllers
     {
         private readonly IUsersService _usersService;
         private readonly IMoviesService _moviesService;
+        private readonly IMapper _mapper;
 
-        public UsersController(IUsersService usersService, IMoviesService moviesService)
+        public UsersController(IUsersService usersService, IMoviesService moviesService, IMapper mapper)
         {
             this._usersService = usersService;
             this._moviesService = moviesService;
+            this._mapper = mapper;
         }
 
         [HttpPost]
@@ -92,7 +96,15 @@ namespace NetPhlixDB.Web.Controllers
         [Authorize]
         public async Task<IActionResult> Details(string id)
         {
-            return await Task.Run(() => this.View());
+            var user = await this._usersService.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                return this.NotFound();
+            }
+
+            var userViewModel = this._mapper.Map<User, UserInfoViewModel>(user);
+
+            return await Task.Run(() => this.View(userViewModel));
         }
     }
 }
