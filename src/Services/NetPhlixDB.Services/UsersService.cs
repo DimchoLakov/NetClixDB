@@ -70,6 +70,11 @@ namespace NetPhlixDB.Services
             return userViewModel;
         }
 
+        public async Task<User> GetUserByIdAsync(string id)
+        {
+            return await this._dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<int> RemoveFavoriteMovie(string id, string userId)
         {
             var movieUser = await this._dbContext.MovieUsers.FirstOrDefaultAsync(x => x.MovieId == id && x.UserId == userId);
