@@ -11,5 +11,7 @@ namespace NetPhlixDB.Services.Contracts
         Task<MovieDetailsViewModel> GetById(string id);
 
         Task<string> GetMovieTitleById(string id);
+
+        Task<bool> MovieExists(string id);
     }
 }
