@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NetPhlixDb.Data.ViewModels.Events;
 using NetPhlixDB.Services.Contracts;
 
 namespace NetPhlixDB.Web.Controllers
@@ -32,6 +33,26 @@ namespace NetPhlixDB.Web.Controllers
             }
 
             return this.View(ev);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Create()
+        {
+            return await Task.Run(() => this.View());
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateEventViewModel viewModel)
+        {
+            if (this.ModelState.IsValid)
+            {
+                await this._eventsService.CreateEvent(viewModel);
+
+                return this.RedirectToAction("All", "Events");
+            }
+
+            return await Task.Run(() => this.View(viewModel));
         }
     }
 }

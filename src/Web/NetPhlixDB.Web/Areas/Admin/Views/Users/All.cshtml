@@ -22,12 +22,12 @@
         {
             <tr class="row">
                 <th class="col-md-1">@index</th>
-                <td class="col-md-5">@user.Email</td>
+                <td class="col-md-5">@user.Username</td>
                 <td class="col-md-6">
                     <div class="form-inline text-center justify-content-around">
-                        @if (await this.UserManager.IsInRoleAsync(this.UserManager.Users.FirstOrDefault(u => u.Email == user.Email), "Admin"))
+                        @if (await this.UserManager.IsInRoleAsync(this.UserManager.Users.FirstOrDefault(u => u.UserName == user.Username), "Admin"))
                         {
-                            if (this.User.Identity.Name != user.Email)
+                            if (this.User.Identity.Name != user.Username)
                             {
                                 <form asp-controller="Users" asp-action="DemoteUser" method="post" class="form-horizontal text-center">
                                     <input type="hidden" name="Id" value="@user.Id" />

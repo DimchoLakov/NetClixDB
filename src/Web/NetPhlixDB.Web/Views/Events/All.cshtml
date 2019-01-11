@@ -6,27 +6,30 @@
 
 <div class="container w-75">
     <h1 class="text-center mt-3 mb-3">Events</h1>
+    <div class="text-center mt-3 mb-3">
+        <a class="btn btn-primary" asp-controller="Events" asp-action="Create">Create new Event</a>
+    </div>
     <table class="table table-striped text-center">
         <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Title</th>
-            <th scope="col">Picture</th>
-        </tr>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Picture</th>
+            </tr>
         </thead>
         <tbody>
-        @{ var index = 1;}
-        @foreach (var e in Model)
-        {
-            <tr>
-                <th scope="row">@index</th>
-                <td><a asp-controller="Events" asp-action="Details" asp-route-id="@e.Id">@e.Title (@e.Date.Year)</a></td>
-                <td><a asp-controller="Events" asp-action="Details" asp-route-id="@e.Id"><img class="img-fluid" style="height: 70px; width: 70px" src="@e.Picture" /></a></td>
-            </tr>
+            @{ var index = 1;}
+            @foreach (var e in Model)
             {
-                index++;
+                <tr>
+                    <th scope="row">@index</th>
+                    <td><a asp-controller="Events" asp-action="Details" asp-route-id="@e.Id">@e.Title (@e.Date.Year)</a></td>
+                    <td><a asp-controller="Events" asp-action="Details" asp-route-id="@e.Id"><img class="img-fluid" style="height: 70px; width: 70px" src="@e.Picture" /></a></td>
+                </tr>
+                {
+                    index++;
+                }
             }
-        }
         </tbody>
     </table>
     <div class="text-center">

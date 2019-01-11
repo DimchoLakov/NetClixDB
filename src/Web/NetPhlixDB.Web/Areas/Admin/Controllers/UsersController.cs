@@ -30,7 +30,7 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
                 .Select(x => new UserViewModel()
                 {
                     Id = x.Id,
-                    Email = x.Email
+                    Username = x.UserName
                 })
                 .ToListAsync();
 

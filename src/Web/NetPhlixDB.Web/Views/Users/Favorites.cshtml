@@ -5,6 +5,10 @@
 }
 <div class="container pt-4 pb-4">
     <h2 class="pb-3 ml-3">My Favorite Movies</h2>
+    @if (!Model.Any())
+    {
+        <em class="pb-3 ml-3">Your list with favorite movies is empty.</em>
+    }
     @for (int i = 0; i < Model.Count(); i += 2)
     {
         <div class="card-deck">
@@ -24,6 +28,10 @@
                                     <p>@Model[k + i].DateReleased</p>
                                 </div>
                                 <a asp-controller="Movies" asp-action="Details" asp-route-id="@Model[k + i].Id" class="btn btn-primary mx-auto">More Info</a>
+                                <form asp-controller="Users" asp-action="RemoveFavMovie" method="post">
+                                    <input type="hidden" asp-for="@Model[k + i].Id" name="id" />
+                                    <input class="btn btn-danger" type="submit" value="Remove from favorites"/>
+                                </form>
                             </div>
                         </div>
                     </div>

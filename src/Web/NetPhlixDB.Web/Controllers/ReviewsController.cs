@@ -43,7 +43,7 @@ namespace NetPhlixDB.Web.Controllers
             }
             reviewsForMovie.MovieId = id;
 
-            var user = await this._usersService.GetUserByEmail(this.User.Identity.Name);
+            var user = await this._usersService.GetUserByUsername(this.User.Identity.Name);
             reviewsForMovie.UserId = user.Id;
 
             return this.View(reviewsForMovie);

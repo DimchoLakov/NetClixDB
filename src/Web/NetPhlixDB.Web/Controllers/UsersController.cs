@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NetPhlixDb.Data.ViewModels.People;
 using NetPhlixDb.Data.ViewModels.Users;
 using NetPhlixDB.Services.Contracts;
 using NetPhlixDB.Web.Common;
@@ -12,10 +13,33 @@ namespace NetPhlixDB.Web.Controllers
     public class UsersController : Controller
     {
         private readonly IUsersService _usersService;
+        private readonly IMoviesService _moviesService;
 
-        public UsersController(IUsersService usersService)
+        public UsersController(IUsersService usersService, IMoviesService moviesService)
         {
             this._usersService = usersService;
+            this._moviesService = moviesService;
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> RemoveFavMovie(RemoveFavMovieViewModel viewModel)
+        {
+            if (viewModel.Id == null ||
+                !this.ModelState.IsValid)
+            {
+                return this.RedirectToAction("All", "Movies");
+            }
+
+            if (!await this._moviesService.MovieExists(viewModel.Id))
+            {
+                return this.NotFound();
+            }
+
+            var user = await this._usersService.GetUserByUsername(this.User.Identity.Name);
+            await this._usersService.RemoveFavoriteMovie(viewModel.Id, user.Id);
+
+            return RedirectToAction("Favorites", "Users");
         }
 
         [HttpPost]
@@ -27,7 +51,7 @@ namespace NetPhlixDB.Web.Controllers
                 return this.RedirectToAction("All", "Movies");
             }
 
-            var user = await this._usersService.GetUserByEmail(this.User.Identity.Name);
+            var user = await this._usersService.GetUserByUsername(this.User.Identity.Name);
             var result = await this._usersService.AddFavoriteMovie(viewModel.Id, user.Id);
             if (result == NetConstants.ZeroResult)
             {
