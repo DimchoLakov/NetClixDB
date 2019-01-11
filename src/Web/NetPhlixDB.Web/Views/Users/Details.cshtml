@@ -1,7 +1,19 @@
-﻿
+﻿@model NetPhlixDb.Data.ViewModels.Users.UserInfoViewModel
+
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "User Details";
 }
 
-<h1>User Details</h1>
-
+<div class="container w-75 text-center">
+    <h1 class="mt-3 mb-3">User Details</h1>
+    <div class="card mx-auto" style="width: 18rem;">
+        <img class="card-img-top" src="@Model.Avatar" alt="Card image cap">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Username: <strong>@Model.UserName</strong></li>
+            <li class="list-group-item">Created On: <strong>@Model.CreatedOn.ToString("MMM/dd/yyyy")</strong></li>
+        </ul>
+    </div>
+    <div class="text-center mt-3">
+        <a class="btn btn-primary w-25 mt-2 mb-2" href="##" onClick="history.go(-1); return false;">Back</a>
+    </div>
+</div>
