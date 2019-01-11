@@ -25,7 +25,7 @@ namespace NetPhlixDB.Services
         {
             var events = await this._dbContext.Events.OrderByDescending(x => x.Date).ToListAsync();
             var eventViewModels = this._mapper.Map<IEnumerable<Event>, IEnumerable<EventViewModel>>(events);
-            
+
             return eventViewModels;
         }
 
@@ -48,6 +48,13 @@ namespace NetPhlixDB.Services
             eventViewModel.EventPersonViewModels = eventPersonViewModels;
 
             return eventViewModel;
+        }
+
+        public async Task<int> CreateEvent(CreateEventViewModel viewModel)
+        {
+            var ev = this._mapper.Map<CreateEventViewModel, Event>(viewModel);
+            await this._dbContext.Events.AddAsync(ev);
+            return await this._dbContext.SaveChangesAsync();
         }
     }
 }

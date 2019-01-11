@@ -58,5 +58,10 @@ namespace NetPhlixDB.Services
             var movie = await this._dbContext.Movies.FirstOrDefaultAsync(x => x.Id == id);
             return movie.Title;
         }
+
+        public async Task<bool> MovieExists(string id)
+        {
+            return await this._dbContext.Movies.FindAsync(id) != null;
+        }
     }
 }
