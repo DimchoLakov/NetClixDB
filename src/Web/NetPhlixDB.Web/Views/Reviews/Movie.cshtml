@@ -13,12 +13,13 @@
         var dateAdded = (int)(DateTime.UtcNow - r.DateAdded).TotalDays;
         <div class="col-sm-3">
             <a asp-controller="Users" asp-action="Details" asp-route-id="@r.UserId"><img src="@r.UserAvatar" style="height: 70px; width: 58px" class="img-fluid"></a>
-            <div class=""><a asp-controller="Users" asp-action="Details" asp-route-id="@r.UserId">@r.UserName</a></div>
-            <div class="mx-1 mt-1 mb-3">Added @dateAdded day ago<br /></div>
+            <div class="mx-1 mt-1 mb-3">Added by <a asp-controller="Users" asp-action="Details" asp-route-id="@r.UserId">@r.UserName</a></div>
+            <div class="mx-1 mt-1 mb-3">@dateAdded day ago<br /></div>
         </div>
         <div class="col-sm-9 text-center mt-1">
             <div class="card-title font-weight-bold">@r.Title</div>
             <div class="card-text">@r.Content</div>
+            <div class="card-text mt-3">Rated with @r.Rating.ToString("F1") / 10</div>
         </div>
     }
 </div>
