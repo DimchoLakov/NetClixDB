@@ -13,6 +13,10 @@ namespace NetPhlixDB.Services.Mapping.Profiles
                 .ForMember(dest => dest.CreatedOn, mapFrom => mapFrom.MapFrom(
                     src => src.CreatedOn.ToString("MMM/dd/yyyy")))
                 .ReverseMap();
+
+            // User Id Email ViewModel
+            CreateMap<User, UserInfoViewModel>()
+                .ReverseMap();
         }
     }
 }
