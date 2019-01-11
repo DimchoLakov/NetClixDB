@@ -22,17 +22,17 @@ namespace NetPhlixDB.Services
             this._mapper = mapper;
         }
 
-        public async Task<List<string>> GetFavoriteMoviesList(string email)
+        public async Task<List<string>> GetFavoriteMoviesList(string username)
         {
-            var user = await this.GetUserByEmail(email);
+            var user = await this.GetUserByUsername(username);
             var userId = user.Id;
             var movies = await this._dbContext.MovieUsers.Where(x => x.UserId == userId).Select(x => x.Movie.Id).ToListAsync();
             return movies;
         }
 
-        public async Task<IEnumerable<IndexMovieViewModel>> GetFavoriteMovies(string email)
+        public async Task<IEnumerable<IndexMovieViewModel>> GetFavoriteMovies(string username)
         {
-            var user = await this.GetUserByEmail(email);
+            var user = await this.GetUserByUsername(username);
             var userId = user.Id;
             var movies = await this._dbContext.MovieUsers.Where(x => x.UserId == userId).Select(x => x.Movie).ToListAsync();
             return _mapper.Map<IEnumerable<Movie>, IEnumerable<IndexMovieViewModel>>(movies);
@@ -53,10 +53,11 @@ namespace NetPhlixDB.Services
             return await this._dbContext.SaveChangesAsync();
         }
 
-        public async Task<UserIdEmailViewModel> GetUserByEmail(string email)
+        public async Task<UserIdEmailViewModel> GetUserByUsername(string username)
         {
+            var user = await this._dbContext.Users.FirstOrDefaultAsync(x => x.UserName == username);
             var userViewModel =
-               this._mapper.Map<UserIdEmailViewModel>(await this._dbContext.Users.FirstOrDefaultAsync(x => x.Email == email));
+                this._mapper.Map<UserIdEmailViewModel>(user);
 
             return userViewModel;
         }
@@ -67,6 +68,13 @@ namespace NetPhlixDB.Services
                 this._mapper.Map<UserIdEmailViewModel>(await this._dbContext.Users.FirstOrDefaultAsync(x => x.Id == id));
 
             return userViewModel;
+        }
+
+        public async Task<int> RemoveFavoriteMovie(string id, string userId)
+        {
+            var movieUser = await this._dbContext.MovieUsers.FirstOrDefaultAsync(x => x.MovieId == id && x.UserId == userId);
+            this._dbContext.MovieUsers.Remove(movieUser);
+            return await this._dbContext.SaveChangesAsync();
         }
     }
 }
