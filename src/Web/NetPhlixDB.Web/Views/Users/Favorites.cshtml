@@ -43,16 +43,16 @@
         @{var prev = this.ViewBag.CurrentPage - 1;}
         @{var next = this.ViewBag.CurrentPage + 1;}
         <div class="col text-center">
-            <a asp-controller="Movies" asp-action="All" asp-route-currentPage="@this.ViewBag.FirstPage" class="btn btn-success">First</a>
+            <a asp-controller="Users" asp-action="Favorites" asp-route-currentPage="@this.ViewBag.FirstPage" class="btn btn-success">First</a>
         </div>
         <div class="col text-right">
-            <a asp-controller="Movies" asp-action="All" asp-route-currentPage="@prev" class="btn btn-success">Previous</a>
+            <a asp-controller="Users" asp-action="Favorites" asp-route-currentPage="@prev" class="btn btn-success">Previous</a>
         </div>
         <div class="col text-left">
-            <a asp-controller="Movies" asp-action="All" asp-route-currentPage="@next" class="btn btn-success">Next</a>
+            <a asp-controller="Users" asp-action="Favorites" asp-route-currentPage="@next" class="btn btn-success">Next</a>
         </div>
         <div class="col text-center">
-            <a asp-controller="Movies" asp-action="All" asp-route-currentPage="@this.ViewBag.LastPage" class="btn btn-success">Last</a>
+            <a asp-controller="Users" asp-action="Favorites" asp-route-currentPage="@this.ViewBag.LastPage" class="btn btn-success">Last</a>
         </div>
     </div>
 </div>
