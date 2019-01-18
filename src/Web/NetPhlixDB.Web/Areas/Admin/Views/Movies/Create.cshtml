@@ -76,8 +76,7 @@
             <div class="col">
                 <div class="form-group">
                     <label asp-for="Storyline" class="col-form-label"></label>
-                    @*<input asp-for="Storyline" class="form-control" />*@
-                    <textarea asp-for="Storyline" class="form-control"></textarea>
+                    <textarea cols="50" rows="10" asp-for="Storyline" class="form-control" placeholder="Storyline..."></textarea>
                     <span asp-validation-for="Storyline" class="text-danger"></span>
                 </div>
             </div>
