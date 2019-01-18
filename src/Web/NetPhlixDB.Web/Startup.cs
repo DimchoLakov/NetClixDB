@@ -46,11 +46,13 @@ namespace NetPhlixDB.Web
                 .AddEntityFrameworkStores<NetPhlixDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication().AddFacebook(facebookOptions =>
-            {
-                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-            });
+            services.AddAuthentication();
+
+            //services.AddAuthentication().AddFacebook(facebookOptions =>
+            //{
+            //    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+            //    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            //});
 
             //services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
             services.AddTransient<IMoviesService, MoviesService>();
