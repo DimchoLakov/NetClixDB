@@ -5,10 +5,9 @@
 }
 
 <div class="container">
-    <h1>Assign Person to Movie</h1>
+    <h2>Assign Person to Movie</h2>
 
-    <h1>@Model.Title</h1>
-    <h1>@Model.MovieId</h1>
+    <h1 class="text-info mb-4">@Model.Title</h1>
 
     @{ var people = Model.PersonToAssignViewModels.ToList();}
 
@@ -26,11 +25,14 @@
                             <span asp-validation-for="@people[k + i].FullName" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Assign to Movie" class="btn btn-primary" />
+                            <input type="submit" value="Assign to Movie" class="btn btn-success" />
                         </div>
                     </form>
                 </div>
             }
         </div>
     }
+    <div class="text-center">
+        <a class="btn btn-primary mt-2 mb-2" asp-area="Admin" asp-controller="Movies" asp-action="Index">Back to List</a>
+    </div>
 </div>

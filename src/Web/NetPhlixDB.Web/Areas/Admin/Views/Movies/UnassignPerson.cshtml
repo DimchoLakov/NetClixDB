@@ -26,11 +26,14 @@
                             <span asp-validation-for="@people[k + i].FullName" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Unassign to Movie" class="btn btn-primary" />
+                            <input type="submit" value="Unassign from Movie" class="btn btn-danger" />
                         </div>
                     </form>
                 </div>
             }
         </div>
     }
+    <div class="text-center">
+        <a class="btn btn-primary mt-2 mb-2" asp-area="Admin" asp-controller="Movies" asp-action="Index">Back to List</a>
+    </div>
 </div>
