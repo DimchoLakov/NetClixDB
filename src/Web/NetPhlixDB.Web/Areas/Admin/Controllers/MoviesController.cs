@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetPhlixDb.Data.ViewModels.Admin.Movies;
+using NetPhlixDb.Data.ViewModels.Admin.People;
 using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
 using NetPhlixDB.Web.Extensions;
@@ -163,6 +164,11 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
             return _dbContext.Movies.Any(e => e.Id == id);
         }
 
+        private bool PersonExists(string id)
+        {
+            return _dbContext.People.Any(e => e.Id == id);
+        }
+
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddGenre(string id)
         {
@@ -203,6 +209,105 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
             }
 
             return this.View(viewModel);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AssignPerson(string id)
+        {
+            var movie = await this._dbContext.Movies.FindAsync(id);
+
+            var moviePeopleIds = await this._dbContext
+                .MoviePeople
+                .Where(mp => mp.MovieId == id)
+                .Select(mp => mp.PersonId)
+                .Distinct()
+                .ToListAsync();
+
+            var peopleIds = await this._dbContext
+                                    .People
+                                    .Select(p => p.Id)
+                                    .ToListAsync();
+
+            foreach (var personId in moviePeopleIds)
+            {
+                peopleIds.Remove(personId);
+            }
+
+            var peopleToAssign = await this._dbContext
+                .People
+                .Where(x => peopleIds.Contains(x.Id))
+                .ToListAsync();
+
+            var movieWithPeopleToAssignViewModel = this._mapper.Map<Movie, MovieWithPeopleToAssignViewModel>(movie);
+            var personToAssignViewModels = this._mapper.Map<IEnumerable<Person>, IEnumerable<PersonAssignViewModel>>(peopleToAssign);
+
+            movieWithPeopleToAssignViewModel.PersonToAssignViewModels = personToAssignViewModels;
+
+            return await Task.Run(() => this.View(movieWithPeopleToAssignViewModel));
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AssignPerson(AssignPersonToMovieViewModel viewModel)
+        {
+            if (this.ModelState.IsValid)
+            {
+                if (this.MovieExists(viewModel.MovieId)
+                    && this.PersonExists(viewModel.PersonId))
+                {
+                    var moviePerson = this._mapper.Map<AssignPersonToMovieViewModel, MoviePerson>(viewModel);
+                    await this._dbContext.MoviePeople.AddAsync(moviePerson);
+                    await this._dbContext.SaveChangesAsync();
+
+                    return this.RedirectToAction("AssignPerson", "Movies", new { id = viewModel.MovieId });
+                }
+            }
+
+            return await Task.Run(() => this.View());
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UnassignPerson(string id)
+        {
+            var movie = await this._dbContext.Movies.FindAsync(id);
+
+            var peopleToUnassign = await this._dbContext
+                .MoviePeople
+                .Where(x => x.MovieId == id)
+                .Select(mp => mp.Person)
+                .Distinct()
+                .ToListAsync();
+
+            var movieWithPeopleToUnassignViewModel = this._mapper.Map<Movie, MovieWithPeopleToUnassignViewModel>(movie);
+            var personToUnassignViewModels = this._mapper.Map<IEnumerable<Person>, IEnumerable<PersonAssignViewModel>>(peopleToUnassign);
+
+            movieWithPeopleToUnassignViewModel.PersonToAssignViewModels = personToUnassignViewModels;
+
+            return await Task.Run(() => this.View(movieWithPeopleToUnassignViewModel));
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UnassignPerson(UnassignPersonFromMovieViewModel viewModel)
+        {
+            if (this.ModelState.IsValid)
+            {
+                if (this.MovieExists(viewModel.MovieId)
+                    && this.PersonExists(viewModel.PersonId))
+                {
+                    var moviePerson = await this._dbContext
+                                    .MoviePeople
+                                    .FirstOrDefaultAsync(mp => mp.MovieId == viewModel.MovieId
+                                                                     && mp.PersonId == viewModel.PersonId);
+
+                    this._dbContext.Remove(moviePerson);
+                    await this._dbContext.SaveChangesAsync();
+
+                    return this.RedirectToAction("UnassignPerson", "Movies", new { id = viewModel.MovieId });
+                }
+            }
+
+            return await Task.Run(() => this.View());
         }
     }
 }
