@@ -8,48 +8,54 @@
     <h1 class="card-title text-center">@Model.Title <span class="h2">(@Model.YearReleased)</span></h1>
     <div class="card mb-3 w-75 mx-auto">
         <div class="row">
-            <img class="card-img-top w-25 align-self-start col-md-4" style="height: 250px" src="@Model.Poster" alt="@Model.Title">
-            <iframe class="embed-responsive-item col-md-8 border-0" src="@Model.Trailer"></iframe>
-        </div>
-        <div class="float-left">
-            @if (!Model.UserFavoriteMovies.Contains(Model.Id))
-            {
-                <form class="mt-2" asp-controller="Users" asp-action="AddFavMovie" method="post">
-                    <input type="hidden" asp-for="Id" />
-                    <div class="form-group">
-                        <button class="btn btn-success">Add to Favorites</button>
-                    </div>
-                </form>
-            }
-            else
-            {
-                <div class="ml-3 mt-2 font-italic font-weight-bold">
-                    <em>This movie is already in <a class="nav-link" asp-controller="Users" asp-action="Favorites">your favorites</a></em>
-                </div>
-            }
-            <div class="card-body">
-                <p class="card-text"><strong>Storyline:</strong> @Model.Storyline</p>
-                <p class="card-text">
-                    <strong>Genres:</strong>
-                    @foreach (var m in Model.MovieGenreViewModels)
-                    {
-                        <a asp-controller="Genres" asp-action="Details" asp-route-id="@m.Id">@m.Name</a>
-                    }
-                </p>
-                <p class="card-text">
-                    <strong>Companies:</strong>
-                    @foreach (var c in Model.MovieCompanyViewModels)
-                    {
-                        <a asp-controller="Companies" asp-action="Details" asp-route-id="@c.Id">@c.Name</a>
-                    }
-                </p>
-                <p class="card-text"><strong>Language:</strong> @Model.Language</p>
-                <p class="card-text"><strong>Type:</strong> @Model.MovieType</p>
-                <p class="card-text"><strong>Duration:</strong> @Model.Duration min</p>
-                <p class="card-text"><strong>Release Date:</strong> @Model.FullDateReleased</p>
-                <p class="card-text"><strong>Production Cost:</strong> $@Model.ProductionCost</p>
-                <p class="card-text"><strong>Rating:</strong> @Model.Rating.ToString("F1") / 10</p>
+            <div class="col-md-4">
+                <img class="card-img-top" style="height: 250px" src="@Model.Poster" alt="@Model.Title">
             </div>
+            <div class="col-md-8 w-100">
+                <iframe class="embed-responsive-item border-0 w-100" style="height: 100%" src="@Model.Trailer"></iframe>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md">
+                @if (!Model.UserFavoriteMovies.Contains(Model.Id))
+                {
+                    <form class="mt-2" asp-controller="Users" asp-action="AddFavMovie" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="form-group">
+                            <button class="btn btn-success">Add to Favorites</button>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    <div class="ml-3 mt-2 font-italic font-weight-bold">
+                        <em>This movie is already in <a class="nav-link" asp-controller="Users" asp-action="Favorites">your favorites</a></em>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="card-body">
+            <p class="card-text"><strong>Storyline:</strong> @Model.Storyline</p>
+            <p class="card-text">
+                <strong>Genres:</strong>
+                @foreach (var m in Model.MovieGenreViewModels)
+                {
+                    <a asp-controller="Genres" asp-action="Details" asp-route-id="@m.Id">@m.Name</a>
+                }
+            </p>
+            <p class="card-text">
+                <strong>Companies:</strong>
+                @foreach (var c in Model.MovieCompanyViewModels)
+                {
+                    <a asp-controller="Companies" asp-action="Details" asp-route-id="@c.Id">@c.Name</a>
+                }
+            </p>
+            <p class="card-text"><strong>Language:</strong> @Model.Language</p>
+            <p class="card-text"><strong>Type:</strong> @Model.MovieType</p>
+            <p class="card-text"><strong>Duration:</strong> @Model.Duration min</p>
+            <p class="card-text"><strong>Release Date:</strong> @Model.FullDateReleased</p>
+            <p class="card-text"><strong>Production Cost:</strong> $@Model.ProductionCost</p>
+            <p class="card-text"><strong>Rating:</strong> @Model.Rating.ToString("F1") / 10</p>
         </div>
     </div>
     <h2 class="text-center mt-4">Cast</h2>
