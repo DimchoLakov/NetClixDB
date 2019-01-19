@@ -68,6 +68,26 @@ namespace NetPhlixDB.Services.Mapping.Profiles.Admin
             // Movie Add Genre View Model
             CreateMap<Movie, MovieAddGenreViewModel>()
                 .ReverseMap();
+
+            // Movie With People To Assign View Model
+            CreateMap<Movie, MovieWithPeopleToAssignViewModel>()
+                .ForMember(dest => dest.MovieId, mapFrom => mapFrom.MapFrom(src => src.Id))
+                .ReverseMap();
+
+            // Movie With People To Unassign View Model
+            CreateMap<Movie, MovieWithPeopleToUnassignViewModel>()
+                .ForMember(dest => dest.MovieId, mapFrom => mapFrom.MapFrom(src => src.Id))
+                .ReverseMap();
+            
+            // Person To Assign View Model
+            CreateMap<Person, PersonAssignViewModel>()
+                .ForMember(dest => dest.PersonId, mapFrom => mapFrom.MapFrom(src => src.Id))
+                .ForMember(dest => dest.FullName, mapFrom => mapFrom.MapFrom(src => src.FirstName + " " + src.LastName))
+                .ReverseMap();
+
+            // Assign Person To Movie View Model
+            CreateMap<MoviePerson, AssignPersonToMovieViewModel>()
+                .ReverseMap();
         }
     }
 }
