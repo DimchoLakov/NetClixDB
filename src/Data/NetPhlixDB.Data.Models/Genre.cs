@@ -12,8 +12,8 @@ namespace NetPhlixDB.Data.Models
             this.Id = Guid.NewGuid().ToString();
             this.GenreMovies = new List<MovieGenre>();
         }
-
-        public GenreType GenreType { get; set; }
+        
+        public string Name { get; set; }
 
         public string Poster { get; set; }
 
