@@ -12,12 +12,6 @@ namespace NetPhlixDB.Data.Configurations
         {
             builder
                 .HasKey(x => x.Id);
-
-            builder
-                .Property(x => x.GenreType)
-                .HasConversion(
-                    x => x.ToString(),
-                    x => (GenreType)Enum.Parse(typeof(GenreType), x, true));
         }
     }
 }

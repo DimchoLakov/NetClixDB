@@ -18,11 +18,6 @@ namespace NetPhlixDB.Data.Configurations
                 .HasConversion(
                     x => x.ToString(),
                     x => (MovieType)Enum.Parse(typeof(MovieType), x, true));
-            builder
-                .Property(x => x.Language)
-                .HasConversion(
-                    x => x.ToString(),
-                    x => (Language)Enum.Parse(typeof(Language), x, true));
         }
     }
 }
