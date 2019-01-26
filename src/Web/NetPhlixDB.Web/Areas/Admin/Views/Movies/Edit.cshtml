@@ -15,27 +15,27 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
+                <input asp-for="Title" placeholder="Title..." class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Storyline" class="control-label"></label>
-                <input asp-for="Storyline" class="form-control" />
+                <input asp-for="Storyline" placeholder="Storyline..." class="form-control" />
                 <span asp-validation-for="Storyline" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Language" class="control-label"></label>
-                <select asp-for="Language" asp-items="Html.GetEnumSelectList<Language>()" class="form-control"></select>
+                <input asp-for="Language" class="form-control" />
                 <span asp-validation-for="Language" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Poster" class="control-label"></label>
-                <input asp-for="Poster" class="form-control" />
+                <input asp-for="Poster" placeholder="Link..." class="form-control" />
                 <span asp-validation-for="Poster" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Trailer" class="control-label"></label>
-                <input asp-for="Trailer" class="form-control" />
+                <input asp-for="Trailer" placeholder="Youtube Link..." class="form-control" />
                 <span asp-validation-for="Trailer" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -45,18 +45,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProductionCost" class="control-label"></label>
-                <input asp-for="ProductionCost" class="form-control" />
+                <input asp-for="ProductionCost" placeholder="Cost..." class="form-control" />
                 <span asp-validation-for="ProductionCost" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Duration" class="control-label"></label>
-                <input asp-for="Duration" class="form-control" />
+                <input asp-for="Duration" placeholder="Runtime..." class="form-control" />
                 <span asp-validation-for="Duration" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Rating" class="control-label"></label>
-                <input asp-for="Rating" class="form-control" />
-                <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MovieType" class="control-label"></label>
