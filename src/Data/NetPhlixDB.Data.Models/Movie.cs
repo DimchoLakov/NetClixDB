@@ -21,7 +21,7 @@ namespace NetPhlixDB.Data.Models
 
         public string Storyline { get; set; }
 
-        public Language Language { get; set; }
+        public string Language { get; set; }
 
         public string Poster { get; set; }
 
@@ -33,7 +33,9 @@ namespace NetPhlixDB.Data.Models
 
         public int Duration { get; set; }
 
-        public double Rating { get; set; }
+        public int VoteCount { get; set; }
+
+        public double VoteAverage { get; set; }
 
         public MovieType MovieType { get; set; }
 
