@@ -28,7 +28,7 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            var genres = await _context.Genres.OrderBy(x => x.GenreType.ToString()).ToListAsync();
+            var genres = await _context.Genres.OrderBy(x => x.Name.ToString()).ToListAsync();
             var genreViewModels = this._mapper.Map<IEnumerable<Genre>, IEnumerable<IndexGenreViewModel>>(genres);
             return View(genreViewModels);
         }
@@ -65,6 +65,12 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (await _context.Genres.FirstOrDefaultAsync(x => x.Name == viewModel.Name) != null)
+                {
+                    this.ModelState.AddModelError(string.Empty, $"Genre with name '{viewModel.Name}' already exists");
+                    return View(viewModel);
+                }
+
                 var genre = this._mapper.Map<CreateGenreViewModel, Genre>(viewModel);
 
                 _context.Add(genre);

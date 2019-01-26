@@ -194,7 +194,7 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
 
             if (this.ModelState.IsValid)
             {
-                var genre = await this._dbContext.Genres.FirstOrDefaultAsync(x => x.GenreType == viewModel.GenreType);
+                var genre = await this._dbContext.Genres.FirstOrDefaultAsync(x => x.Name == viewModel.Name);
                 var movieGenre = new MovieGenre()
                 {
                     MovieId = viewModel.Id,
