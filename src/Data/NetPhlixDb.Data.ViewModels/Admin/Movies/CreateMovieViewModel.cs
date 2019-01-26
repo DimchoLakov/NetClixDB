@@ -48,11 +48,6 @@ namespace NetPhlixDb.Data.ViewModels.Admin.Movies
         public int Duration { get; set; }
 
         [Required]
-        [Display(Name = "Rating")]
-        [Range(typeof(double), "1", "10")]
-        public double Rating { get; set; }
-
-        [Required]
         [Display(Name = "Movie Type")]
         public MovieType MovieType { get; set; }
     }
