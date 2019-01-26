@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using NetPhlixDB.Data.Models.Enums;
 
 namespace NetPhlixDb.Data.ViewModels.Admin.Genres
 {
     public class CreateGenreViewModel
     {
         [Required]
-        [Display(Name = "Genre")]
-        public GenreType GenreType { get; set; }
+        [Display(Name = "Name")]
+        public string Name { get; set; }
 
         [Required]
         [DataType(DataType.Url)]
