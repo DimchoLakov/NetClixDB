@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetPhlixDB.Data;
 
 namespace NetPhlixDB.Data.Migrations
 {
     [DbContext(typeof(NetPhlixDbContext))]
-    partial class NetPhlixDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190124045847_AddedNamePropertyForGenre")]
+    partial class AddedNamePropertyForGenre
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,7 +142,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2019, 1, 25, 1, 17, 42, 878, DateTimeKind.Utc).AddTicks(1671));
+                        .HasDefaultValue(new DateTime(2019, 1, 24, 4, 58, 44, 741, DateTimeKind.Utc).AddTicks(6144));
 
                     b.Property<string>("Image");
 
@@ -160,15 +162,13 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2019, 1, 25, 1, 17, 42, 911, DateTimeKind.Utc).AddTicks(1737));
+                        .HasDefaultValue(new DateTime(2019, 1, 24, 4, 58, 44, 779, DateTimeKind.Utc).AddTicks(7493));
 
                     b.Property<string>("Details");
 
                     b.Property<string>("Logo");
 
                     b.Property<string>("Name");
-
-                    b.Property<string>("OriginCountry");
 
                     b.HasKey("Id");
 
@@ -182,7 +182,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2019, 1, 25, 1, 17, 42, 955, DateTimeKind.Utc).AddTicks(8086));
+                        .HasDefaultValue(new DateTime(2019, 1, 24, 4, 58, 44, 822, DateTimeKind.Utc).AddTicks(6640));
 
                     b.Property<string>("Info");
 
@@ -199,6 +199,9 @@ namespace NetPhlixDB.Data.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("GenreType")
+                        .IsRequired();
 
                     b.Property<string>("Name");
 
@@ -218,7 +221,8 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<int>("Duration");
 
-                    b.Property<string>("Language");
+                    b.Property<string>("Language")
+                        .IsRequired();
 
                     b.Property<string>("MovieType")
                         .IsRequired();
@@ -336,7 +340,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("DateAdded")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2019, 1, 25, 1, 17, 43, 45, DateTimeKind.Utc).AddTicks(4301));
+                        .HasDefaultValue(new DateTime(2019, 1, 24, 4, 58, 44, 914, DateTimeKind.Utc).AddTicks(3402));
 
                     b.Property<string>("MovieId");
 
@@ -371,7 +375,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2019, 1, 25, 1, 17, 43, 52, DateTimeKind.Utc).AddTicks(933));
+                        .HasDefaultValue(new DateTime(2019, 1, 24, 4, 58, 44, 920, DateTimeKind.Utc).AddTicks(5708));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);

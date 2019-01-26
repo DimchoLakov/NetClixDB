@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetPhlixDB.Data;
 
 namespace NetPhlixDB.Data.Migrations
 {
     [DbContext(typeof(NetPhlixDbContext))]
-    partial class NetPhlixDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190124041702_RemovedRatingPropertyForMovie")]
+    partial class RemovedRatingPropertyForMovie
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,7 +142,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2019, 1, 25, 1, 17, 42, 878, DateTimeKind.Utc).AddTicks(1671));
+                        .HasDefaultValue(new DateTime(2019, 1, 24, 4, 17, 1, 280, DateTimeKind.Utc).AddTicks(1210));
 
                     b.Property<string>("Image");
 
@@ -160,15 +162,13 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2019, 1, 25, 1, 17, 42, 911, DateTimeKind.Utc).AddTicks(1737));
+                        .HasDefaultValue(new DateTime(2019, 1, 24, 4, 17, 1, 299, DateTimeKind.Utc).AddTicks(9571));
 
                     b.Property<string>("Details");
 
                     b.Property<string>("Logo");
 
                     b.Property<string>("Name");
-
-                    b.Property<string>("OriginCountry");
 
                     b.HasKey("Id");
 
@@ -182,7 +182,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2019, 1, 25, 1, 17, 42, 955, DateTimeKind.Utc).AddTicks(8086));
+                        .HasDefaultValue(new DateTime(2019, 1, 24, 4, 17, 1, 323, DateTimeKind.Utc).AddTicks(6169));
 
                     b.Property<string>("Info");
 
@@ -200,7 +200,8 @@ namespace NetPhlixDB.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("GenreType")
+                        .IsRequired();
 
                     b.Property<string>("Poster");
 
@@ -218,7 +219,8 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<int>("Duration");
 
-                    b.Property<string>("Language");
+                    b.Property<string>("Language")
+                        .IsRequired();
 
                     b.Property<string>("MovieType")
                         .IsRequired();
@@ -232,10 +234,6 @@ namespace NetPhlixDB.Data.Migrations
                     b.Property<string>("Title");
 
                     b.Property<string>("Trailer");
-
-                    b.Property<double>("VoteAverage");
-
-                    b.Property<int>("VoteCount");
 
                     b.HasKey("Id");
 
@@ -336,7 +334,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("DateAdded")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2019, 1, 25, 1, 17, 43, 45, DateTimeKind.Utc).AddTicks(4301));
+                        .HasDefaultValue(new DateTime(2019, 1, 24, 4, 17, 1, 375, DateTimeKind.Utc).AddTicks(6710));
 
                     b.Property<string>("MovieId");
 
@@ -371,7 +369,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2019, 1, 25, 1, 17, 43, 52, DateTimeKind.Utc).AddTicks(933));
+                        .HasDefaultValue(new DateTime(2019, 1, 24, 4, 17, 1, 378, DateTimeKind.Utc).AddTicks(3326));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
