@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using NetPhlixDb.Data.ViewModels.Users;
 using NetPhlixDB.Data.Models;
+using NetPhlixDB.Services.Mapping.Constants;
 
 namespace NetPhlixDB.Services.Mapping.Profiles
 {
@@ -11,7 +12,7 @@ namespace NetPhlixDB.Services.Mapping.Profiles
             // User Id Email ViewModel
             CreateMap<User, UserIdEmailViewModel>()
                 .ForMember(dest => dest.CreatedOn, mapFrom => mapFrom.MapFrom(
-                    src => src.CreatedOn.ToString("MMM/dd/yyyy")))
+                    src => src.CreatedOn.ToString(ProfileConstants.FullDateFormat)))
                 .ReverseMap();
 
             // User Id Email ViewModel

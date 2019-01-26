@@ -4,6 +4,7 @@ using NetPhlixDb.Data.ViewModels.Admin.Movies;
 using NetPhlixDb.Data.ViewModels.Movies;
 using NetPhlixDb.Data.ViewModels.People;
 using NetPhlixDB.Data.Models;
+using NetPhlixDB.Services.Mapping.Constants;
 
 namespace NetPhlixDB.Services.Mapping.Profiles
 {
@@ -30,7 +31,6 @@ namespace NetPhlixDB.Services.Mapping.Profiles
                     mapFrom => mapFrom.MapFrom(src => src.DateReleased.ToString(ProfileConstants.YearDateFormat)))
                 .ForMember(dest => dest.FullDateReleased,
                     mapFrom => mapFrom.MapFrom(src => src.DateReleased.ToString(ProfileConstants.FullDateFormat)))
-                .ForMember(dest => dest.Language, mapFrom => mapFrom.MapFrom(src => src.Language.ToString()))
                 .ForMember(dest => dest.MovieType, mapFrom => mapFrom.MapFrom(src => src.MovieType.ToString()))
                 .ForMember(
                     dest => dest.Rating,
@@ -43,7 +43,7 @@ namespace NetPhlixDB.Services.Mapping.Profiles
             
             // Movie Genre View Model
             CreateMap<Genre, MovieGenreViewModel>()
-                .ForMember(dest => dest.Name, mapFrom => mapFrom.MapFrom(src => src.GenreType.ToString()));
+                .ForMember(dest => dest.Name, mapFrom => mapFrom.MapFrom(src => src.Name));
 
             // Movie Person View Model
             CreateMap<Person, MoviePersonViewModel>()
