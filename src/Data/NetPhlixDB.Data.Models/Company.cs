@@ -19,6 +19,8 @@ namespace NetPhlixDB.Data.Models
         public string Details { get; set; }
 
         public string Logo { get; set; }
+
+        public string OriginCountry { get; set; }
         
         public virtual ICollection<MovieCompany> CompanyMovies { get; set; }
     }
