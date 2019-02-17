@@ -5,7 +5,7 @@
     ViewData["Title"] = "Movie Reviews";
 }
 
-<h2 class="text-center mt-4">@Model.MovieTitle - Reviews</h2>
+<h2 class="text-center mt-4 text-info">@Model.MovieTitle - Reviews</h2>
 <hr class="w-75" />
 <div class="row w-75 mx-auto mt-2">
     @foreach (var r in Model.MovieReviewViewModels)
@@ -45,7 +45,7 @@
             <input type="hidden" asp-for="@Model.MovieId"/>
             <input type="hidden" asp-for="@Model.UserId"/>
             <div class="text-right mt-1">
-                <button class="btn btn-success btn" type="submit">Save</button>
+                <button class="btn btn-success btn" type="submit">Add your review</button>
             </div>
         </form>
     </div>
