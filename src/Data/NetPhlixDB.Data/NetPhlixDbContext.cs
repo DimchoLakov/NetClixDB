@@ -14,6 +14,8 @@ namespace NetPhlixDB.Data
         public virtual DbSet<Article> Articles { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<EventPerson> EventPeople { get; set; }
+        public virtual DbSet<EventMovie> EventMovies { get; set; }
         public virtual DbSet<Genre> Genres { get; set; }
         public virtual DbSet<Movie> Movies { get; set; }
         public virtual DbSet<MovieCompany> MovieCompanies { get; set; }
@@ -29,6 +31,8 @@ namespace NetPhlixDB.Data
                 .ApplyConfiguration(new ArticleConfiguration())
                 .ApplyConfiguration(new CompanyConfiguration())
                 .ApplyConfiguration(new EventConfiguration())
+                .ApplyConfiguration(new EventPersonConfiguration())
+                .ApplyConfiguration(new EventMovieConfiguration())
                 .ApplyConfiguration(new GenreConfiguration())
                 .ApplyConfiguration(new MovieCompanyConfiguration())
                 .ApplyConfiguration(new MovieConfiguration())
