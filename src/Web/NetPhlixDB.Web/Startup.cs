@@ -41,6 +41,7 @@ namespace NetPhlixDB.Web
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"))
                     .UseLazyLoadingProxies());
+
             services.AddIdentity<User, IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<NetPhlixDbContext>()
@@ -72,7 +73,9 @@ namespace NetPhlixDB.Web
                         typeof(ReviewsProfile),
                         typeof(PeopleProfile),
                         typeof(EventsProfile),
-                        typeof(AdminProfile)
+                        typeof(AdminProfile),
+                        typeof(EventMovieProfile),
+                        typeof(EventPersonProfile)
                     );
                 });
             IMapper mapper = mappingConfig.CreateMapper();
