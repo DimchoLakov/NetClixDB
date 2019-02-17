@@ -19,13 +19,14 @@ namespace NetPhlixDB.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var movies = await this._moviesService.GetAll();
             if (this.User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("All", "Movies");
             }
 
-            return View(movies.Take(NetConstants.IndexMoviesCount).ToList());
+            var movies = await this._moviesService.Get(NetConstants.IndexMoviesCount);
+
+            return View(movies.ToList());
         }
 
         public async Task<IActionResult> About()
