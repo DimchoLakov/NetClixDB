@@ -9,6 +9,12 @@ namespace NetPhlixDB.Services.Contracts
     {
         Task<IEnumerable<IndexMovieViewModel>> GetAll();
 
+        Task<IEnumerable<IndexMovieViewModel>> Get(int count);
+
+        Task<int> GetMoviesCount();
+
+        Task<IEnumerable<IndexMovieViewModel>> GetPageMovies(int skip, int take);
+
         Task<MovieDetailsViewModel> GetById(string id);
 
         Task<string> GetMovieTitleById(string id);

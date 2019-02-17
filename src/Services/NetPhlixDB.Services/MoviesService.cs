@@ -28,6 +28,23 @@ namespace NetPhlixDB.Services
             return _mapper.Map<IEnumerable<Movie>, IEnumerable<IndexMovieViewModel>>(movies);
         }
 
+        public async Task<IEnumerable<IndexMovieViewModel>> Get(int count)
+        {
+            var movies = await this._dbContext.Movies.Take(count).OrderByDescending(x => x.DateReleased).ToListAsync();
+            return _mapper.Map<IEnumerable<Movie>, IEnumerable<IndexMovieViewModel>>(movies);
+        }
+
+        public async Task<int> GetMoviesCount()
+        {
+            return await this._dbContext.Movies.CountAsync();
+        }
+
+        public async Task<IEnumerable<IndexMovieViewModel>> GetPageMovies(int skip, int take)
+        {
+            var movies = await this._dbContext.Movies.Skip(skip).Take(take).OrderByDescending(x => x.DateReleased).ToListAsync();
+            return _mapper.Map<IEnumerable<Movie>, IEnumerable<IndexMovieViewModel>>(movies);
+        }
+
         public async Task<MovieDetailsViewModel> GetById(string id)
         {
             var movieById = await this._dbContext.Movies.FirstOrDefaultAsync(x => x.Id == id);
