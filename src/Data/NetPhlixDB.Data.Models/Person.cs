@@ -11,6 +11,7 @@ namespace NetPhlixDB.Data.Models
         {
             this.Id = Guid.NewGuid().ToString();
             this.PersonMovies = new List<MoviePerson>();
+            this.PersonEvents = new List<EventPerson>();
         }
 
         public string FirstName { get; set; }
@@ -30,5 +31,7 @@ namespace NetPhlixDB.Data.Models
         public string Bio { get; set; }
 
         public virtual ICollection<MoviePerson> PersonMovies { get; set; }
+
+        public virtual ICollection<EventPerson> PersonEvents { get; set; }
     }
 }

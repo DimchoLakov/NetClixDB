@@ -8,7 +8,8 @@ namespace NetPhlixDB.Data.Models
         public Event()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.MoviePeople = new List<MoviePerson>();
+            this.EventMovies = new List<EventMovie>();
+            this.EventPeople = new List<EventPerson>();
         }
 
         public string Title { get; set; }
@@ -19,6 +20,8 @@ namespace NetPhlixDB.Data.Models
 
         public DateTime Date { get; set; }
 
-        public virtual ICollection<MoviePerson> MoviePeople { get; set; }
+        public virtual ICollection<EventMovie> EventMovies { get; set; }
+
+        public virtual ICollection<EventPerson> EventPeople { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using NetPhlixDb.Data.ViewModels.Events;
 using NetPhlixDB.Data;
 using NetPhlixDB.Services;
+using NetPhlixDB.Services.Contracts;
 using NetPhlixDB.Services.Mapping.Profiles;
 using NetPhlixDB.Services.Mapping.Profiles.Admin;
 using Xunit;
@@ -15,6 +16,8 @@ namespace NetPhlixDB.Tests
     {
         private readonly NetPhlixDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IMoviesService _moviesService;
+        private readonly IPeopleService _peopleService;
 
         public EventsServiceTests()
         {
@@ -36,12 +39,14 @@ namespace NetPhlixDB.Tests
                     );
                 });
             this._mapper = mappingConfig.CreateMapper();
+            this._moviesService = new MoviesService(this._mapper, this._dbContext);
+            this._peopleService = new PeopleService(this._dbContext, this._mapper);
         }
 
         [Fact]
         public async Task CreateEventShouldReturnOne()
         {
-            var service = new EventsService(this._dbContext, this._mapper);
+            var service = new EventsService(this._dbContext, this._mapper, this._moviesService, this._peopleService);
 
             var result = await service.CreateEvent(new CreateEventViewModel());
 
@@ -51,7 +56,7 @@ namespace NetPhlixDB.Tests
         [Fact]
         public async Task GetAllShouldReturnCorrectCount()
         {
-            var service = new EventsService(this._dbContext, this._mapper);
+            var service = new EventsService(this._dbContext, this._mapper, this._moviesService, this._peopleService);
             await service.CreateEvent(new CreateEventViewModel());
             await service.CreateEvent(new CreateEventViewModel());
 

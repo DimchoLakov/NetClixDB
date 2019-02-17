@@ -48,5 +48,7 @@ namespace NetPhlixDB.Data.Models
         public virtual ICollection<MovieGenre> MovieGenres { get; set; }
 
         public virtual ICollection<Review> Reviews { get; set; }
+
+        public virtual ICollection<EventMovie> MovieEvents { get; set; }
     }
 }

@@ -9,10 +9,14 @@ namespace NetPhlixDB.Web.Controllers
     public class EventsController : Controller
     {
         private readonly IEventsService _eventsService;
+        private readonly IMoviesService _moviesService;
+        private readonly IPeopleService _peopleService;
 
-        public EventsController(IEventsService eventsService)
+        public EventsController(IEventsService eventsService, IMoviesService moviesService, IPeopleService peopleService)
         {
             this._eventsService = eventsService;
+            this._moviesService = moviesService;
+            this._peopleService = peopleService;
         }
 
         [Authorize]
@@ -41,8 +45,8 @@ namespace NetPhlixDB.Web.Controllers
             return await Task.Run(() => this.View());
         }
 
-        [Authorize]
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(CreateEventViewModel viewModel)
         {
             if (this.ModelState.IsValid)
@@ -53,6 +57,61 @@ namespace NetPhlixDB.Web.Controllers
             }
 
             return await Task.Run(() => this.View(viewModel));
+        }
+
+        [Authorize]
+        public async Task<IActionResult> AddMovies(string id)
+        {
+            var eventWithNotAddedMoviesViewModel = await this._eventsService.GetEventWithNotAddedMoviesById(id);
+
+            return await Task.Run(() => this.View(eventWithNotAddedMoviesViewModel));
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddMovies(AddMovieToEventViewModel viewModel)
+        {
+            if (!await this._eventsService.EventExists(viewModel.EventId) ||
+                !await this._moviesService.MovieExists(viewModel.MovieId))
+            {
+                return this.NotFound();
+            }
+
+            if (this.ModelState.IsValid)
+            {
+                await this._eventsService.AddMovieToEvent(viewModel);
+
+                return this.RedirectToAction("AddMovies", "Events", new { id = viewModel.EventId });
+            }
+
+            return await Task.Run(() => this.View());
+        }
+
+        public async Task<IActionResult> AddPeople(string id)
+        {
+            var eventWithNotAddedPeople = await this._eventsService.GetEventWithNotAddedPeopleById(id);
+
+            return await Task.Run(() => this.View(eventWithNotAddedPeople));
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddPeople(AddPersonToEventViewModel viewModel)
+        {
+            if (!await this._eventsService.EventExists(viewModel.EventId) ||
+                !await this._peopleService.PersonExists(viewModel.PersonId))
+            {
+                return this.NotFound();
+            }
+
+            if (this.ModelState.IsValid)
+            {
+                await this._eventsService.AddPersonToEvent(viewModel);
+
+                return this.RedirectToAction("AddPeople", "Events", new { id = viewModel.EventId });
+            }
+
+            return await Task.Run(() => this.View());
         }
     }
 }

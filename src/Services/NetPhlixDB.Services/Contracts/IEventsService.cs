@@ -11,5 +11,15 @@ namespace NetPhlixDB.Services.Contracts
         Task<EventViewModel> GetById(string id);
 
         Task<int> CreateEvent(CreateEventViewModel viewModel);
+
+        Task<EventWithNotAddedMoviesViewModel> GetEventWithNotAddedMoviesById(string id);
+
+        Task<EventWithNotAddPeopleViewModel> GetEventWithNotAddedPeopleById(string id);
+
+        Task<bool> EventExists(string id);
+
+        Task<int> AddMovieToEvent(AddMovieToEventViewModel viewModel);
+
+        Task<int> AddPersonToEvent(AddPersonToEventViewModel viewModel);
     }
 }

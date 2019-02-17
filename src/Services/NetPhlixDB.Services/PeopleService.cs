@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using NetPhlixDb.Data.ViewModels.Events;
 using NetPhlixDb.Data.ViewModels.People;
 using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
@@ -43,6 +44,41 @@ namespace NetPhlixDB.Services
 
             personViewModel.PersonMovieViewModels = personMovieViewModels.ToList();
             return personViewModel;
+        }
+
+        public async Task<IEnumerable<PersonEventViewModel>> GetPeopleNotAddedToEventById(string id)
+        {
+            var eventPersonIds = await this._dbContext
+                .EventPeople
+                .Where(x => x.EventId == id)
+                .Select(x => x.PersonId)
+                .Distinct()
+                .ToListAsync();
+
+            var allPersonIds = await this._dbContext
+                .People
+                .Select(x => x.Id)
+                .ToListAsync();
+
+            foreach (var personId in eventPersonIds)
+            {
+                allPersonIds.Remove(personId);
+            }
+
+            var peopleNotAddedToEvent = await this._dbContext
+                .People
+                .Where(x => allPersonIds.Contains(x.Id))
+                .ToListAsync();
+
+            var peopleNotAddedToEventViewModels =
+                this._mapper.Map<IEnumerable<Person>, IEnumerable<PersonEventViewModel>>(peopleNotAddedToEvent);
+
+            return peopleNotAddedToEventViewModels;
+        }
+
+        public async Task<bool> PersonExists(string id)
+        {
+            return await this._dbContext.People.FindAsync(id) != null;
         }
     }
 }

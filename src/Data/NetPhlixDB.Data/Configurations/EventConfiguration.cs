@@ -12,10 +12,10 @@ namespace NetPhlixDB.Data.Configurations
             builder
                 .HasKey(x => x.Id);
 
-            builder
-                .HasMany(x => x.MoviePeople)
-                .WithOne(x => x.Event)
-                .HasForeignKey(x => x.EventId);
+            //builder
+            //    .HasMany(x => x.MoviePeople)
+            //    .WithOne(x => x.Event)
+            //    .HasForeignKey(x => x.EventId);
 
             builder
                 .Property(x => x.Date)

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetPhlixDB.Data;
 
 namespace NetPhlixDB.Data.Migrations
 {
     [DbContext(typeof(NetPhlixDbContext))]
-    partial class NetPhlixDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190210173401_AddedEventMoviesAndEventPeopleTables")]
+    partial class AddedEventMoviesAndEventPeopleTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,7 +142,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2019, 2, 15, 13, 52, 12, 571, DateTimeKind.Utc).AddTicks(8554));
+                        .HasDefaultValue(new DateTime(2019, 2, 10, 17, 33, 59, 685, DateTimeKind.Utc).AddTicks(5787));
 
                     b.Property<string>("Image");
 
@@ -160,7 +162,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2019, 2, 15, 13, 52, 12, 590, DateTimeKind.Utc).AddTicks(6817));
+                        .HasDefaultValue(new DateTime(2019, 2, 10, 17, 33, 59, 708, DateTimeKind.Utc).AddTicks(3290));
 
                     b.Property<string>("Details");
 
@@ -182,7 +184,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2019, 2, 15, 13, 52, 12, 592, DateTimeKind.Utc).AddTicks(4089));
+                        .HasDefaultValue(new DateTime(2019, 2, 10, 17, 33, 59, 743, DateTimeKind.Utc).AddTicks(1387));
 
                     b.Property<string>("Info");
 
@@ -300,7 +302,11 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<string>("PersonId");
 
+                    b.Property<string>("EventId");
+
                     b.HasKey("MovieId", "PersonId");
+
+                    b.HasIndex("EventId");
 
                     b.HasIndex("PersonId");
 
@@ -358,7 +364,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("DateAdded")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2019, 2, 15, 13, 52, 12, 660, DateTimeKind.Utc).AddTicks(2640));
+                        .HasDefaultValue(new DateTime(2019, 2, 10, 17, 33, 59, 808, DateTimeKind.Utc).AddTicks(6764));
 
                     b.Property<string>("MovieId");
 
@@ -393,7 +399,7 @@ namespace NetPhlixDB.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2019, 2, 15, 13, 52, 12, 665, DateTimeKind.Utc).AddTicks(5799));
+                        .HasDefaultValue(new DateTime(2019, 2, 10, 17, 33, 59, 813, DateTimeKind.Utc).AddTicks(3718));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
@@ -546,6 +552,10 @@ namespace NetPhlixDB.Data.Migrations
 
             modelBuilder.Entity("NetPhlixDB.Data.Models.MoviePerson", b =>
                 {
+                    b.HasOne("NetPhlixDB.Data.Models.Event", "Event")
+                        .WithMany("MoviePeople")
+                        .HasForeignKey("EventId");
+
                     b.HasOne("NetPhlixDB.Data.Models.Movie", "Movie")
                         .WithMany("MoviePeople")
                         .HasForeignKey("MovieId")

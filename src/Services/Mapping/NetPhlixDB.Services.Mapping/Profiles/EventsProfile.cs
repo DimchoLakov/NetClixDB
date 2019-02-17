@@ -25,6 +25,18 @@ namespace NetPhlixDB.Services.Mapping.Profiles
             // Create Event View Model
             CreateMap<Event, CreateEventViewModel>()
                 .ReverseMap();
+
+            // Add Movie To Event View Model
+            CreateMap<Event, EventWithNotAddedMoviesViewModel>()
+                .ForMember(dest => dest.EventId, mapFrom => mapFrom.MapFrom(src => src.Id))
+                .ForMember(dest => dest.EventTitle, mapFrom => mapFrom.MapFrom(src => src.Title))
+                .ReverseMap();
+
+            // Add Person To Event View Model
+            CreateMap<Event, EventWithNotAddPeopleViewModel>()
+                .ForMember(dest => dest.EventId, mapFrom => mapFrom.MapFrom(src => src.Id))
+                .ForMember(dest => dest.EventTitle, mapFrom => mapFrom.MapFrom(src => src.Title))
+                .ReverseMap();
         }
     }
 }

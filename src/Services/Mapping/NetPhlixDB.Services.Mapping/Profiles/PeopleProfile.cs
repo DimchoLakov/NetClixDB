@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using NetPhlixDb.Data.ViewModels.Events;
 using NetPhlixDb.Data.ViewModels.People;
 using NetPhlixDB.Data.Models;
 
@@ -19,6 +20,12 @@ namespace NetPhlixDB.Services.Mapping.Profiles
                     dest => dest.Storyline,
                     mapFrom => mapFrom.MapFrom(
                         src => src.Storyline.Length >= 50 ? src.Storyline.Substring(0, 100) + "..." : src.Storyline))
+                .ReverseMap();
+
+            CreateMap<Person, PersonEventViewModel>()
+                .ForMember(dest => dest.PersonId, mapFrom => mapFrom.MapFrom(src => src.Id))
+                .ForMember(dest => dest.FullName, mapFrom => mapFrom.MapFrom(src => src.FirstName + " " + src.LastName))
+                .ForMember(dest => dest.Role, mapFrom => mapFrom.MapFrom(src => src.PersonRole.ToString()))
                 .ReverseMap();
         }
     }
