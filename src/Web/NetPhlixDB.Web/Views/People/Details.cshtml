@@ -5,7 +5,7 @@
 }
 
 <div class="container w-75">
-    <h2 class="text-center mb-4 mt-4">@Model.Name</h2>
+    <h2 class="text-center mb-4 mt-4 text-info">@Model.Name</h2>
     <div class="card mx-auto" style="width: 28rem;">
         <img class="card-img-top" src="@Model.Picture" alt="Card image cap">
         <div class="card-body">
@@ -32,7 +32,7 @@
                     <div class="card border-primary mb-3 mt-3" style="max-width: 15rem;">
                         <div class="card-header">(@pMovies[k + i].DateReleased.Year)</div>
                         <div class="card-body text-primary">
-                            <h5 class="card-title">@pMovies[k + i].Title</h5>
+                            <h5 class="card-title"><a asp-controller="Movies" asp-action="Details" asp-route-id="@pMovies[k + i].Id">@pMovies[k + i].Title</a></h5>
                             <p class="card-text">@pMovies[k + i].Storyline</p>
                         </div>
                     </div>
