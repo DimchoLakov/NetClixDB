@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +24,7 @@ namespace Sandbox
 {
     public static class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;
             Console.WriteLine($"{typeof(Program).Namespace} ({string.Join(" ", args)}) starts working...");
@@ -34,11 +35,11 @@ namespace Sandbox
             using (var serviceScope = serviceProvider.CreateScope())
             {
                 serviceProvider = serviceScope.ServiceProvider;
-                SandboxCode(serviceProvider);
+                await SandboxCode(serviceProvider);
             }
         }
 
-        private static void SandboxCode(IServiceProvider serviceProvider)
+        private static async Task SandboxCode(IServiceProvider serviceProvider)
         {
             var dbContext = serviceProvider.GetService<NetPhlixDbContext>();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -47,14 +48,14 @@ namespace Sandbox
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
 
-            //TMDbClient tmDbClient = new TMDbClient("yourApiKey");
+            //TMDbClient tmDbClient = new TMDbClient("5769e4e15e7a9a58e457832097850cea");
             
             var jsonSettings = new JsonSerializerSettings() { Formatting = Formatting.Indented, Culture = CultureInfo.InvariantCulture };
 
             var mapper = (IMapper)serviceProvider.GetService(typeof(IMapper));
-            for (int i = 300_000; i < 300_100; i++)
+            for (int i = 300_000; i < 305_000; i++)
             {
-                var url = "https://api.themoviedb.org/3/movie/" + $"{i}" + "?api_key=yourApiKey";
+                var url = "https://api.themoviedb.org/3/movie/" + $"{i}" + "?api_key=5769e4e15e7a9a58e457832097850cea";
                 //client.BaseAddress = new Uri(url);
                 HttpResponseMessage response = client.GetAsync(url).Result;
 
@@ -80,8 +81,8 @@ namespace Sandbox
                         continue;
                     }
 
-                    var movieExists = dbContext.Movies.FirstOrDefault(x => x.Title == movieDto.Title) != null;
-                    if (movieExists)
+                    var movieExists = await dbContext.Movies.FirstOrDefaultAsync(x => x.Title == movieDto.Title) != null;
+                    if (movieExists || string.IsNullOrWhiteSpace(movieDto.Poster))
                     {
                         continue;
                     }
@@ -95,7 +96,7 @@ namespace Sandbox
 
                     foreach (var genre in genres)
                     {
-                        var g = dbContext.Genres.FirstOrDefault(x => x.Name == genre.Name);
+                        var g = await dbContext.Genres.FirstOrDefaultAsync(x => x.Name == genre.Name);
                         var genreExists = g != null;
 
                         if (!genreExists)
@@ -103,7 +104,7 @@ namespace Sandbox
                             dbContext.Genres.Add(genre);
                             dbContext.SaveChanges();
 
-                            g = dbContext.Genres.FirstOrDefault(x => x.Name == genre.Name);
+                            g = await dbContext.Genres.FirstOrDefaultAsync(x => x.Name == genre.Name);
                         }
 
                         movieGenres.Add(new MovieGenre()
@@ -115,7 +116,7 @@ namespace Sandbox
 
                     foreach (var company in companies)
                     {
-                        var c = dbContext.Companies.FirstOrDefault(x => x.Name == company.Name);
+                        var c = await dbContext.Companies.FirstOrDefaultAsync(x => x.Name == company.Name);
                         var companyExists = c != null;
 
                         if (!companyExists)
@@ -123,7 +124,7 @@ namespace Sandbox
                             dbContext.Companies.Add(company);
                             dbContext.SaveChanges();
 
-                            c = dbContext.Companies.FirstOrDefault(x => x.Name == company.Name);
+                            c = await dbContext.Companies.FirstOrDefaultAsync(x => x.Name == company.Name);
                         }
 
                         movieCompanies.Add(new MovieCompany()
@@ -136,10 +137,10 @@ namespace Sandbox
                     movie.MovieGenres = movieGenres;
                     movie.MovieCompanies = movieCompanies;
                     
-                    dbContext.Movies.Add(movie);
-                    dbContext.SaveChanges();
+                    await dbContext.Movies.AddAsync(movie);
+                    await dbContext.SaveChangesAsync();
 
-                    var moviesCount = dbContext.Movies.Count();
+                    var moviesCount = await dbContext.Movies.CountAsync();
 
                     Console.WriteLine($"Movies count: {moviesCount}");
                 }
@@ -154,7 +155,9 @@ namespace Sandbox
 
         private static void ConfigureServices(ServiceCollection services)
         {
-            var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+            var temp = Directory.GetCurrentDirectory();
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", false, true)
                 .AddEnvironmentVariables()
                 .Build();
