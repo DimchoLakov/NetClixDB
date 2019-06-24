@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Extensions.Internal;
 using NetPhlixDb.Data.ViewModels.Events;
 using NetPhlixDb.Data.ViewModels.Movies;
 using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
+using NetPhlixDB.Services.Common;
 using NetPhlixDB.Services.Contracts;
 
 namespace NetPhlixDB.Services
@@ -39,10 +43,115 @@ namespace NetPhlixDB.Services
             return await this._dbContext.Movies.CountAsync();
         }
 
-        public async Task<IEnumerable<IndexMovieViewModel>> GetPageMovies(int skip, int take)
+        public async Task<PaginationMoviesViewModel> GetPageMovies(int? currentPage, string search, string genre)
         {
-            var movies = await this._dbContext.Movies.Skip(skip).Take(take).OrderByDescending(x => x.DateReleased).ToListAsync();
-            return _mapper.Map<IEnumerable<Movie>, IEnumerable<IndexMovieViewModel>>(movies);
+            var count = await this._dbContext.Movies.CountAsync();
+
+            var size = NetConstants.DefaultPageSize;
+            var totalPages = (int)Math.Ceiling(decimal.Divide(count, size));
+
+            if (currentPage <= 1)
+            {
+                currentPage = 1;
+            }
+            if (currentPage >= totalPages)
+            {
+                currentPage = totalPages;
+            }
+
+            var skip = (int)(currentPage - 1) * size;
+            if (skip < 0)
+            {
+                skip = 0;
+            }
+            var take = size;
+
+            var movies = new List<Movie>();
+
+            if (!string.IsNullOrWhiteSpace(search) && 
+                !string.IsNullOrWhiteSpace(genre))
+            {
+                movies = await this._dbContext.Movies
+                    .Where(x => x.Title.ToLower().Contains(search.ToLower()) &&
+                                x.MovieGenres.Any(mg => mg.Genre.Name == genre))
+                    .Skip(skip)
+                    .Take(take)
+                    .OrderByDescending(x => x.DateReleased).ToListAsync();
+
+                var moviesCountAfterSearch = await this._dbContext.Movies
+                    .Where(x => x.Title.ToLower().Contains(search.ToLower()) &&
+                                x.MovieGenres.Any(mg => mg.Genre.Name == genre))
+                    .CountAsync();
+
+                totalPages = (int) Math.Ceiling(decimal.Divide(moviesCountAfterSearch, size));
+            }
+            else if (!string.IsNullOrWhiteSpace(search))
+            {
+                movies = await this._dbContext.Movies
+                    .Where(x => x.Title.ToLower().Contains(search.ToLower()))
+                    .Skip(skip)
+                    .Take(take)
+                    .OrderByDescending(x => x.DateReleased).ToListAsync();
+
+                var moviesCountAfterSearch = await this._dbContext.Movies
+                    .Where(x => x.Title.ToLower().Contains(search.ToLower()))
+                    .CountAsync();
+
+                totalPages = (int)Math.Ceiling(decimal.Divide(moviesCountAfterSearch, size));
+            }
+            else if (!string.IsNullOrWhiteSpace(genre))
+            {
+                movies = await this._dbContext.Movies
+                    .Where(x => x.MovieGenres.Any(mg => mg.Genre.Name.ToLower() == genre.ToLower()))
+                    .Skip(skip)
+                    .Take(take)
+                    .OrderByDescending(x => x.DateReleased).ToListAsync();
+
+                var moviesCountAfterSearch = await this._dbContext.Movies
+                    .Where(x => x.MovieGenres.Any(mg => mg.Genre.Name.ToLower() == genre.ToLower()))
+                    .CountAsync();
+
+                totalPages = (int)Math.Ceiling(decimal.Divide(moviesCountAfterSearch, size));
+            }
+            else
+            {
+                movies = await this._dbContext.Movies
+                    .Skip(skip)
+                    .Take(take)
+                    .OrderByDescending(x => x.DateReleased).ToListAsync();
+            }
+
+            var movieViewModels = _mapper.Map<IEnumerable<Movie>, IEnumerable<IndexMovieViewModel>>(movies);
+            var paginationMovieViewModel = new PaginationMoviesViewModel()
+            {
+                IndexMovieViewModels = movieViewModels.ToList()
+            };
+            paginationMovieViewModel.CurrentPage = currentPage.Value;
+            paginationMovieViewModel.TotalPages = totalPages;
+            paginationMovieViewModel.Search = search;
+            paginationMovieViewModel.Genre = genre;
+            
+            // Get all genres
+            var allGenres = await this._dbContext
+                .Genres
+                .OrderBy(x => x.Name)
+                .Select(x => new SelectListItem(x.Name, x.Name)).ToListAsync();
+
+            paginationMovieViewModel.Genres = allGenres;
+
+            // Map genres for each movie
+            foreach (var mov in paginationMovieViewModel.IndexMovieViewModels)
+            {
+                var genres = await this._dbContext
+                    .MovieGenres
+                    .Where(x => x.MovieId == mov.Id)
+                    .Select(x => x.Genre)
+                    .ToListAsync();
+
+                mov.Genres = this._mapper.Map<IEnumerable<Genre>, IEnumerable<MovieGenreViewModel>>(genres).ToList();
+            }
+
+            return paginationMovieViewModel;
         }
 
         public async Task<MovieDetailsViewModel> GetById(string id)
