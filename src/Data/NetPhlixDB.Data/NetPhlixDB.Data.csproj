@@ -10,6 +10,8 @@
     <Compile Remove="Migrations\20181225053616_RemovedDirectorColRenamedEventColsAddedArticlesTable.cs" />
     <Compile Remove="Migrations\20181225053925_RemovedDirectorColRenamedEventColsAddedArticlesTable.cs" />
     <Compile Remove="Migrations\20190125003657_ChangedLanguageToStringForMovie.cs" />
+    <Compile Remove="Migrations\20190623183804_Test.cs" />
+    <Compile Remove="Migrations\20190623183804_Test.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +29,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
