@@ -20,31 +20,11 @@ namespace NetPhlixDB.Web.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> All(int? currentPage = 1)
+        public async Task<IActionResult> All(int? currentPage = 1, string search = "", string genre = "")
         {
-            var count = await this._moviesService.GetMoviesCount();
-            var size = NetConstants.PageSize;
-            var totalPages = (int)Math.Ceiling(decimal.Divide(count, size));
+            var paginationMoviesViewModel = await this._moviesService.GetPageMovies(currentPage, search, genre);
 
-            if (currentPage <= 1)
-            {
-                currentPage = 1;
-            }
-            if (currentPage >= totalPages)
-            {
-                currentPage = totalPages;
-            }
-
-            var skip = (int)(currentPage - 1) * size;
-            var take = size;
-
-            this.ViewBag.CurrentPage = currentPage;
-            this.ViewBag.FirstPage = 1;
-            this.ViewBag.LastPage = totalPages;
-
-            var movies = await this._moviesService.GetPageMovies(skip, take);
-
-            return this.View(movies.ToList());
+            return this.View(paginationMoviesViewModel);
         }
 
         [Authorize]
