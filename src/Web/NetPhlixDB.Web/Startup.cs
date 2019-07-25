@@ -15,6 +15,7 @@ using NetPhlixDB.Services.Contracts;
 using NetPhlixDB.Services.Mapping.Profiles;
 using NetPhlixDB.Services.Mapping.Profiles.Admin;
 using NetPhlixDB.Web.Middlewares;
+using NetPhlixDB.Web.Hubs;
 
 namespace NetPhlixDB.Web
 {
@@ -62,6 +63,7 @@ namespace NetPhlixDB.Web
             services.AddTransient<ICompaniesService, CompaniesService>();
             services.AddTransient<IPeopleService, PeopleService>();
             services.AddTransient<IEventsService, EventsService>();
+            services.AddTransient<IGenresService, GenresService>();
 
             var mappingConfig = new MapperConfiguration(
                 mc =>
@@ -86,6 +88,8 @@ namespace NetPhlixDB.Web
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -124,6 +128,11 @@ namespace NetPhlixDB.Web
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chatHub");
+            });
 
             app.UseMvc(routes =>
             {
