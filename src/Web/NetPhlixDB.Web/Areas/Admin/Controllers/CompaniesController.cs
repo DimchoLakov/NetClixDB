@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using NetPhlixDb.Data.ViewModels.Admin.Companies;
 using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
+using NetPhlixDB.Services.Contracts;
 
 namespace NetPhlixDB.Web.Areas.Admin.Controllers
 {
@@ -16,40 +16,33 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
     {
         private readonly NetPhlixDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ICompaniesService _companiesService;
 
-        public CompaniesController(NetPhlixDbContext context, IMapper mapper)
+        public CompaniesController(NetPhlixDbContext context, IMapper mapper, ICompaniesService companiesService)
         {
-            _context = context;
-            _mapper = mapper;
+            this._context = context;
+            this._mapper = mapper;
+            this._companiesService = companiesService;
         }
 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            var companies = await _context.Companies.OrderByDescending(x => x.CreatedOn).ToListAsync();
-            var companyViewModels =
-                this._mapper.Map<IEnumerable<Company>, IEnumerable<IndexCompanyViewModel>>(companies);
-            return View(companyViewModels);
+            var companies = await this._companiesService.GetAll();
+            
+            return View(companies.OrderByDescending(x => x.CreatedOn));
         }
 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var company = await _context.Companies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var company = await this._companiesService.GetByIdAdmin(id);
             if (company == null)
             {
                 return NotFound();
             }
 
-            var companyViewModel = this._mapper.Map<Company, EditDeleteDetailsCompanyViewModel>(company);
-
-            return View(companyViewModel);
+            return View(company);
         }
 
         [Authorize(Roles = "Admin")]
@@ -64,10 +57,8 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var company = this._mapper.Map<CreateCompanyViewModel, Company>(viewModel);
+                await this._companiesService.Create(viewModel);
 
-                _context.Add(company);
-                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(viewModel);
@@ -76,20 +67,13 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var company = await _context.Companies.FindAsync(id);
+            var company = await this._companiesService.GetByIdAdmin(id);
             if (company == null)
             {
                 return NotFound();
             }
 
-            var editDeleteViewModel = this._mapper.Map<Company, EditDeleteDetailsCompanyViewModel>(company);
-
-            return View(editDeleteViewModel);
+            return View(company);
         }
 
         [Authorize(Roles = "Admin")]
@@ -103,26 +87,16 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                var company = this._mapper.Map<EditDeleteDetailsCompanyViewModel, Company>(viewModel);
+                var result = await this._companiesService.Update(viewModel);
 
-                try
+                if (result == null)
                 {
-                    _context.Update(company);
-                    await _context.SaveChangesAsync();
+                    return this.NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CompanyExists(company.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(viewModel);
         }
 
@@ -134,14 +108,12 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var company = await _context.Companies
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (company == null)
-            {
-                return NotFound();
-            }
+            var companyViewModel = await this._companiesService.GetByIdAdmin(id);
 
-            var companyViewModel = this._mapper.Map<Company, EditDeleteDetailsCompanyViewModel>(company);
+            if (companyViewModel == null)
+            {
+                return this.NotFound();
+            }
 
             return View(companyViewModel);
         }
@@ -150,15 +122,18 @@ namespace NetPhlixDB.Web.Areas.Admin.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var company = await _context.Companies.FindAsync(id);
-            _context.Companies.Remove(company);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            if (id == null)
+            {
+                return this.NotFound();
+            }
 
-        private bool CompanyExists(string id)
-        {
-            return _context.Companies.Any(e => e.Id == id);
+            var result = await this._companiesService.Delete(id);
+            if (result == null)
+            {
+                return this.NotFound();
+            }
+            
+            return RedirectToAction(nameof(Index));
         }
     }
 }
