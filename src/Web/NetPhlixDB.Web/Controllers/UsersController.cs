@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using NetPhlixDb.Data.ViewModels.People;
 using NetPhlixDb.Data.ViewModels.Users;
 using NetPhlixDB.Data.Models;
+using NetPhlixDB.Services.Common;
 using NetPhlixDB.Services.Contracts;
-using NetPhlixDB.Web.Common;
 
 namespace NetPhlixDB.Web.Controllers
 {
@@ -71,7 +71,7 @@ namespace NetPhlixDB.Web.Controllers
             var favoriteMovies = await this._usersService.GetFavoriteMovies(this.User.Identity.Name);
 
             var count = favoriteMovies.Count();
-            var size = NetConstants.PageSize;
+            var size = NetConstants.DefaultPageSize;
             var totalPages = (int)Math.Ceiling(decimal.Divide(count, size));
 
             if (currentPage <= 1)

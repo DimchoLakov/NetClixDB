@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using NetPhlixDB.Services.Common;
 using NetPhlixDB.Services.Contracts;
-using NetPhlixDB.Web.Common;
 using NetPhlixDB.Web.Models;
 
 namespace NetPhlixDB.Web.Controllers
@@ -24,7 +24,7 @@ namespace NetPhlixDB.Web.Controllers
                 return RedirectToAction("All", "Movies");
             }
 
-            var movies = await this._moviesService.Get(NetConstants.IndexMoviesCount);
+            var movies = await this._moviesService.Get(NetConstants.LoggedOutMoviesCount);
 
             return View(movies.ToList());
         }

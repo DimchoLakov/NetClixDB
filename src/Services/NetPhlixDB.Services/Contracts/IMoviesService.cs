@@ -13,7 +13,7 @@ namespace NetPhlixDB.Services.Contracts
 
         Task<int> GetMoviesCount();
 
-        Task<IEnumerable<IndexMovieViewModel>> GetPageMovies(int skip, int take);
+        Task<PaginationMoviesViewModel> GetPageMovies(int? currentPage, string search, string genre);
 
         Task<MovieDetailsViewModel> GetById(string id);
 

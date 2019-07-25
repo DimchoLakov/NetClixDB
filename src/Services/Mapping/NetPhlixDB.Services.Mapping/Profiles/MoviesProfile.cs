@@ -44,17 +44,19 @@ namespace NetPhlixDB.Services.Mapping.Profiles
             
             // Movie Genre View Model
             CreateMap<Genre, MovieGenreViewModel>()
-                .ForMember(dest => dest.Name, mapFrom => mapFrom.MapFrom(src => src.Name));
+                .ReverseMap();
 
             // Movie Person View Model
             CreateMap<Person, MoviePersonViewModel>()
                 .ForMember(dest => dest.FullName, mapFrom => mapFrom.MapFrom(src => src.FirstName + " " + src.LastName))
-                .ForMember(dest => dest.PersonRole, mapFrom => mapFrom.MapFrom(src => src.PersonRole.ToString()));
+                .ForMember(dest => dest.PersonRole, mapFrom => mapFrom.MapFrom(src => src.PersonRole.ToString()))
+                .ReverseMap();
 
             // Movie Review View Model
             CreateMap<Review, MovieReviewViewModel>()
                 .ForMember(dest => dest.UserName, mapFrom => mapFrom.MapFrom(src => src.User.UserName))
-                .ForMember(dest => dest.UserAvatar, mapFrom => mapFrom.MapFrom(src => src.User.Avatar));
+                .ForMember(dest => dest.UserAvatar, mapFrom => mapFrom.MapFrom(src => src.User.Avatar))
+                .ReverseMap();
 
             // Create Movie View Model
             CreateMap<CreateMovieViewModel, Movie>()

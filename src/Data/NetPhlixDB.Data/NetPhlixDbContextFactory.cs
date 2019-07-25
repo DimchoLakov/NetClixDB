@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.IO;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace NetPhlixDB.Data
 {
@@ -7,11 +9,23 @@ namespace NetPhlixDB.Data
     {
         public NetPhlixDbContext CreateDbContext(string[] args)
         {
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var goThreeDirsBack = "../../../";
+            var webDirectory = "Web/NetPhlixDB.Web/";
+            var fullPath = Path.GetFullPath(currentDirectory + goThreeDirsBack + webDirectory);
+
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(fullPath)
+                .AddJsonFile("appsettings.json")
+                .Build();
+
             var optionsBuilder = new DbContextOptionsBuilder<NetPhlixDbContext>();
+
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+
             optionsBuilder
-                .UseSqlServer(connectionString:
-                    "Server=(LocalDb)\\MSSQLLocalDB;Database=NetPhlixDB;Trusted_Connection=True;MultipleActiveResultSets=true")
-                .UseLazyLoadingProxies();
+                .UseSqlServer(connectionString)
+                .UseLazyLoadingProxies(true);
 
             return new NetPhlixDbContext(optionsBuilder.Options);
         }
