@@ -15,7 +15,7 @@ namespace NetPhlixDB.Web.Controllers
 
         public async Task<IActionResult> Details(string id)
         {
-            var companyDetails = await this._companiesService.GetCompanyDetails(id);
+            var companyDetails = await this._companiesService.GetById(id);
             
             if (companyDetails == null)
             {
