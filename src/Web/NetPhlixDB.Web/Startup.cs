@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +15,7 @@ using NetPhlixDB.Services;
 using NetPhlixDB.Services.Contracts;
 using NetPhlixDB.Services.Mapping.Profiles;
 using NetPhlixDB.Services.Mapping.Profiles.Admin;
+using NetPhlixDB.Web.Emails;
 using NetPhlixDB.Web.Middlewares;
 using NetPhlixDB.Web.Hubs;
 
@@ -43,7 +45,15 @@ namespace NetPhlixDB.Web
                     Configuration.GetConnectionString("DefaultConnection"))
                     .UseLazyLoadingProxies());
 
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>(options =>
+                {
+                    options.SignIn.RequireConfirmedEmail = true;
+
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequiredUniqueChars = 0;
+                })
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<NetPhlixDbContext>()
                 .AddDefaultTokenProviders();
@@ -82,6 +92,9 @@ namespace NetPhlixDB.Web
                 });
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
+
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
 
             services.AddMvc(options =>
                 {
