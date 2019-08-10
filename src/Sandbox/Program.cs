@@ -6,7 +6,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using AngleSharp.Common;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,9 +16,11 @@ using Microsoft.Extensions.DependencyInjection;
 using NetPhlixDb.Data.ViewModels.DTOs;
 using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
+using NetPhlixDb.Data.ViewModels.Events;
 using NetPhlixDB.Services.Mapping.Profiles;
 using Newtonsoft.Json;
 using TMDbLib.Client;
+using TMDbLib.Objects.Authentication;
 using TMDbLib.Objects.Movies;
 using Movie = NetPhlixDB.Data.Models.Movie;
 
@@ -44,112 +48,48 @@ namespace Sandbox
             var dbContext = serviceProvider.GetService<NetPhlixDbContext>();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
+            //HttpClient client = new HttpClient();
+            //client.DefaultRequestHeaders.Accept.Add(
+            //    new MediaTypeWithQualityHeaderValue("application/json"));
 
-            //TMDbClient tmDbClient = new TMDbClient("5769e4e15e7a9a58e457832097850cea");
-            
+            TMDbClient tmDbClient = new TMDbClient("");
+            tmDbClient.GetConfig();
+
+            var mov1 = await tmDbClient.GetMovieListsAsync(2);
+            var col1 = await tmDbClient.GetCollectionAsync(1);
+            var genres = await tmDbClient.GetMovieGenresAsync();
+            var people = await tmDbClient.GetChangesPeopleAsync();
+            var person = await tmDbClient.GetPersonAsync(1);
+            var network = await tmDbClient.GetNetworkAsync(1);
+
             var jsonSettings = new JsonSerializerSettings() { Formatting = Formatting.Indented, Culture = CultureInfo.InvariantCulture };
 
             var mapper = (IMapper)serviceProvider.GetService(typeof(IMapper));
-            for (int i = 300_000; i < 305_000; i++)
+
+            for (int i = 1; i < 200_000; i++)
             {
-                var url = "https://api.themoviedb.org/3/movie/" + $"{i}" + "?api_key=5769e4e15e7a9a58e457832097850cea";
-                //client.BaseAddress = new Uri(url);
-                HttpResponseMessage response = client.GetAsync(url).Result;
+                var movie = await tmDbClient.GetMovieAsync(i, MovieMethods.Images | MovieMethods.Credits | MovieMethods.Reviews);
 
-                if (response.IsSuccessStatusCode)
+                if (movie.Credits != null)
                 {
-                    //var tmdMovie = tmDbClient.GetMovieAsync(i, MovieMethods.Videos | MovieMethods.Images).Result;
-                    //var tmdbVideos = tmdMovie.Videos.Results;
-
-                    //Console.WriteLine($"Movie name: {tmdMovie.Title}");
-
-                    // Parse the response body.
-                    var json = response.Content.ReadAsStringAsync().Result;
-                    //Console.WriteLine(json);
-
-                    var movieDto = new MovieDto();
-                    try
-                    {
-                        movieDto = JsonConvert.DeserializeObject<MovieDto>(json, jsonSettings);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e.Message);
-                        continue;
-                    }
-
-                    var movieExists = await dbContext.Movies.FirstOrDefaultAsync(x => x.Title == movieDto.Title) != null;
-                    if (movieExists || string.IsNullOrWhiteSpace(movieDto.Poster))
-                    {
-                        continue;
-                    }
-
-                    var movie = mapper.Map<MovieDto, Movie>(movieDto);
-                    var genres = mapper.Map<IEnumerable<MovieGenreDto>, IEnumerable<Genre>>(movieDto.MovieGenreDtos);
-                    var companies = mapper.Map<IEnumerable<MovieCompanyDto>, IEnumerable<Company>>(movieDto.MovieCompanyDtos);
-
-                    var movieGenres = new List<MovieGenre>();
-                    var movieCompanies = new List<MovieCompany>();
-
-                    foreach (var genre in genres)
-                    {
-                        var g = await dbContext.Genres.FirstOrDefaultAsync(x => x.Name == genre.Name);
-                        var genreExists = g != null;
-
-                        if (!genreExists)
-                        {
-                            dbContext.Genres.Add(genre);
-                            dbContext.SaveChanges();
-
-                            g = await dbContext.Genres.FirstOrDefaultAsync(x => x.Name == genre.Name);
-                        }
-
-                        movieGenres.Add(new MovieGenre()
-                        {
-                            GenreId = g.Id,
-                            Movie = movie
-                        });
-                    }
-
-                    foreach (var company in companies)
-                    {
-                        var c = await dbContext.Companies.FirstOrDefaultAsync(x => x.Name == company.Name);
-                        var companyExists = c != null;
-
-                        if (!companyExists)
-                        {
-                            dbContext.Companies.Add(company);
-                            dbContext.SaveChanges();
-
-                            c = await dbContext.Companies.FirstOrDefaultAsync(x => x.Name == company.Name);
-                        }
-
-                        movieCompanies.Add(new MovieCompany()
-                        {
-                            CompanyId = c.Id,
-                            Movie = movie
-                        });
-                    }
-
-                    movie.MovieGenres = movieGenres;
-                    movie.MovieCompanies = movieCompanies;
-                    
-                    await dbContext.Movies.AddAsync(movie);
-                    await dbContext.SaveChangesAsync();
-
-                    var moviesCount = await dbContext.Movies.CountAsync();
-
-                    Console.WriteLine($"Movies count: {moviesCount}");
+                    var cast = movie.Credits.Cast.First();
+                    var crew = movie.Credits.Crew.First();
                 }
-                else
+
+                if (movie.Reviews?.TotalResults > 0)
                 {
-                    Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+                    var review = movie.Reviews.Results.First();
+                }
+
+                if (movie.Images != null)
+                {
+                    foreach (var imagePoster in movie.Images.Posters)
+                    {
+                        
+                        var img = tmDbClient.GetImageUrl("w500", imagePoster.FilePath);
+                    }
                 }
             }
-            client.Dispose();
 
         }
 
