@@ -9,6 +9,15 @@
     {
       "library": "jqueryui@1.12.1",
       "destination": "wwwroot/lib/jqueryui/"
+    },
+    {
+      "library": "signalr.js@2.4.0",
+      "destination": "wwwroot/lib/signalr.js/"
     }
-  ]
+  ,
+{
+  "library": "select2@4.0.8",
+  "destination": "wwwroot/lib/select2/"
+}
+]
 }

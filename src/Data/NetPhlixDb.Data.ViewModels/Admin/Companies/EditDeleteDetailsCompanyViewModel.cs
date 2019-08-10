@@ -26,7 +26,7 @@ namespace NetPhlixDb.Data.ViewModels.Admin.Companies
 
         [Required]
         [Display(Name = "Logo")]
-        [DataType(DataType.Url)]
+        [DataType(DataType.Text)]
         public string Logo { get; set; }
     }
 }

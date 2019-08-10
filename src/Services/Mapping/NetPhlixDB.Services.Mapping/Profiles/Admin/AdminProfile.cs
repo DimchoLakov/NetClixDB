@@ -31,17 +31,13 @@ namespace NetPhlixDB.Services.Mapping.Profiles.Admin
             // Create Genre View Model
             CreateMap<Genre, CreateGenreViewModel>()
                 .ReverseMap();
-
-            // Index Company View Model
-            CreateMap<Company, IndexCompanyViewModel>()
-                .ReverseMap();
-
+            
             // Create Company View Model
             CreateMap<Company, CreateCompanyViewModel>()
                 .ReverseMap();
 
-            // Edit Delete Details Genre View Model
-            CreateMap<Company, EditDeleteDetailsGenreViewModel>()
+            // Edit Delete Details Company View Model
+            CreateMap<Company, EditDeleteDetailsCompanyViewModel>()
                 .ReverseMap();
 
             // User Id View Model

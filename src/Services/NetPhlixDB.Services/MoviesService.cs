@@ -43,7 +43,7 @@ namespace NetPhlixDB.Services
             return await this._dbContext.Movies.CountAsync();
         }
 
-        public async Task<PaginationMoviesViewModel> GetPageMovies(int? currentPage, string search, string genre)
+        public async Task<PaginationMoviesViewModel> GetPageMovies(int? currentPage, string search, string genre, string sortOrder)
         {
             var count = await this._dbContext.Movies.CountAsync();
 
@@ -119,6 +119,25 @@ namespace NetPhlixDB.Services
                     .Skip(skip)
                     .Take(take)
                     .OrderByDescending(x => x.DateReleased).ToListAsync();
+            }
+
+            switch (sortOrder)
+            {
+                case "name":
+                    movies = movies.OrderBy(x => x.Title).ToList();
+                    break;
+                case "name_desc":
+                    movies = movies.OrderByDescending(x => x.Title).ToList();
+                    break;
+                case "date":
+                    movies = movies.OrderBy(x => x.DateReleased).ToList();
+                    break;
+                case "date_desc":
+                    movies = movies.OrderByDescending(x => x.DateReleased).ToList();
+                    break;
+                default:
+                    movies = movies.OrderBy(x => x.Title).ToList();
+                    break;
             }
 
             var movieViewModels = _mapper.Map<IEnumerable<Movie>, IEnumerable<IndexMovieViewModel>>(movies);
