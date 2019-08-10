@@ -20,9 +20,14 @@ namespace NetPhlixDB.Web.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> All(int? currentPage = 1, string search = "", string genre = "")
+        public async Task<IActionResult> All(int? currentPage = 1, string search = "", string genre = "", string sortOrder = "")
         {
-            var paginationMoviesViewModel = await this._moviesService.GetPageMovies(currentPage, search, genre);
+            ViewData["NameSortParm"] = sortOrder == "name" ? "name_desc" : "name";
+            ViewData["DateSortParm"] = sortOrder == "date" ? "date_desc" : "date";
+            ViewData["CurrentFilter"] = search;
+            ViewData["CurrentGenre"] = genre;
+
+            var paginationMoviesViewModel = await this._moviesService.GetPageMovies(currentPage, search, genre, sortOrder);
 
             return this.View(paginationMoviesViewModel);
         }
