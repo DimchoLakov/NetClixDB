@@ -1,58 +1,66 @@
-﻿@model IList<NetPhlixDb.Data.ViewModels.Movies.IndexMovieViewModel>
+﻿@model PaginationMoviesViewModel
 
 @{
-    ViewData["Title"] = "My Favorite Movies";
+    ViewData["Title"] = "Favourite Movies";
 }
-<div class="container pt-4 pb-4">
-    <h2 class="pb-3 ml-3 text-info">My Favorite Movies</h2>
-    @if (!Model.Any())
-    {
-        <em class="pb-3 ml-3">Your list with favorite movies is empty.</em>
-    }
-    @for (int i = 0; i < Model.Count(); i += 2)
-    {
-        <div class="card-deck">
-            @for (int k = 0; k <= 1 && k + i < Model.Count; k++)
-            {
-                <div class="col-sm-6">
-                    <div class="card mb-2">
-                        <img class="card-img-top w-100" style="height: 250px" src="@Model[k + i].Poster" alt="@Model[k + i].Title">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-8">
-                                    <h5 class="card-title">@Model[k + i].Title</h5>
-                                    <p class="card-text">@Model[k + i].ShortStoryline</p>
-                                </div>
-                                <div class="col-sm-4">
-                                    <p><strong>Rating</strong>: @Model[k + i].Rating.ToString("F1") / 10</p>
-                                    <p>@Model[k + i].DateReleased</p>
-                                </div>
-                                <a asp-controller="Movies" asp-action="Details" asp-route-id="@Model[k + i].Id" class="btn btn-primary mx-auto">More Info</a>
-                                <form asp-controller="Users" asp-action="RemoveFavMovie" method="post">
-                                    <input type="hidden" asp-for="@Model[k + i].Id" name="id" />
-                                    <input class="btn btn-danger" type="submit" value="Remove from favorites"/>
-                                </form>
-                            </div>
-                        </div>
+<h2 class="pb-3 ml-3 text-info">All Movies</h2>
+
+<div class="row mt-3 mb-3 ml-1">
+    <form asp-controller="Albums" asp-action="All" method="get">
+        <label class="font-weight-bold" asp-for="@Model.Search"></label>
+        <span>Search by </span>
+        <input type="text" asp-for="@Model.Search" />
+        <span>and/or <strong>Genre</strong></span>
+        <select asp-for="Genre" asp-items="Model.Genres">
+            <option></option>
+        </select>
+        <input class="btn btn-info" type="submit" value="Search" />
+    </form>
+</div>
+
+@for (int i = 0; i < Model.IndexMovieViewModels.Count; i += 4)
+{
+    <div class="row mb-2">
+        @for (int k = 0; k <= 3 && k + i < Model.IndexMovieViewModels.Count; k++)
+        {
+            <div class="col-md-3">
+                <div class="card" style="width: 17rem;">
+                    <a asp-area="" asp-controller="Movies" asp-action="Details" asp-route-id="@Model.IndexMovieViewModels[k + i].Id">
+                        <img class="card-img-top" src="@Model.IndexMovieViewModels[k + i].Poster" alt="Card image cap">
+                    </a>
+                    <div class="card-body">
+                        <a asp-area="" asp-controller="Movies" asp-action="Details" asp-route-id="@Model.IndexMovieViewModels[k + i].Id">
+                            <h5 class="card-title">@Model.IndexMovieViewModels[k + i].Title</h5>
+                        </a>
+                        <p class="card-text">@Model.IndexMovieViewModels[k + i].ShortStoryline</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Rating</strong>: @Model.IndexMovieViewModels[k + i].Rating.ToString("F1") / 10
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Release Date</strong>: @Model.IndexMovieViewModels[k + i].DateReleased
+                        </li>
+                    </ul>
+                    <div class="card-body">
+                        <strong>Genres: </strong>
+                        @for (int g = 0; g < Model.IndexMovieViewModels[k + i].Genres.Count; g++)
+                        {
+                            var genre = Model.IndexMovieViewModels[k + i].Genres[g];
+                            if (g != Model.IndexMovieViewModels[k + i].Genres.Count - 1)
+                            {
+                                <a asp-area="" asp-controller="Movies" asp-action="All" asp-route-genre="@genre.Name">@genre.Name,</a>
+                            }
+                            else
+                            {
+                                <a asp-area="" asp-controller="Movies" asp-action="All" asp-route-genre="@genre.Name">@genre.Name</a>
+                            }
+                        }
                     </div>
                 </div>
-            }
-        </div>
-    }
-    <div class="row mt-3">
-        @{var prev = this.ViewBag.CurrentPage - 1;}
-        @{var next = this.ViewBag.CurrentPage + 1;}
-        <div class="col text-center">
-            <a asp-controller="Users" asp-action="Favorites" asp-route-currentPage="@this.ViewBag.FirstPage" class="btn btn-success">First</a>
-        </div>
-        <div class="col text-right">
-            <a asp-controller="Users" asp-action="Favorites" asp-route-currentPage="@prev" class="btn btn-success">Previous</a>
-        </div>
-        <div class="col text-left">
-            <a asp-controller="Users" asp-action="Favorites" asp-route-currentPage="@next" class="btn btn-success">Next</a>
-        </div>
-        <div class="col text-center">
-            <a asp-controller="Users" asp-action="Favorites" asp-route-currentPage="@this.ViewBag.LastPage" class="btn btn-success">Last</a>
-        </div>
+            </div>
+        }
     </div>
-</div>
+}
+
+<partial name="_PaginationPartial" />
