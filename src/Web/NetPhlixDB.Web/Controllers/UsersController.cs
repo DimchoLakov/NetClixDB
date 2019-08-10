@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -66,31 +64,11 @@ namespace NetPhlixDB.Web.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Favorites(int? currentPage = 1)
+        public async Task<IActionResult> Favorites(int? currentPage = 1, string search = "", string genre = "")
         {
-            var favoriteMovies = await this._usersService.GetFavoriteMovies(this.User.Identity.Name);
+            var paginationMoviesViewModel = await this._usersService.GetPageMovies(currentPage, search, genre);
 
-            var count = favoriteMovies.Count();
-            var size = NetConstants.DefaultPageSize;
-            var totalPages = (int)Math.Ceiling(decimal.Divide(count, size));
-
-            if (currentPage <= 1)
-            {
-                currentPage = 1;
-            }
-            if (currentPage >= totalPages)
-            {
-                currentPage = totalPages;
-            }
-
-            var skip = (int)(currentPage - 1) * size;
-            var take = size;
-
-            this.ViewBag.CurrentPage = currentPage;
-            this.ViewBag.FirstPage = 1;
-            this.ViewBag.LastPage = totalPages;
-
-            return this.View(favoriteMovies.Skip(skip).Take(take).ToList());
+            return this.View(paginationMoviesViewModel);
         }
 
         [Authorize]
