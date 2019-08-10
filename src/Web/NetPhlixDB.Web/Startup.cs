@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +16,7 @@ using NetPhlixDB.Services.Contracts;
 using NetPhlixDB.Services.Mapping.Profiles;
 using NetPhlixDB.Services.Mapping.Profiles.Admin;
 using NetPhlixDB.Web.Middlewares;
+using NetPhlixDB.Web.Services;
 
 namespace NetPhlixDB.Web
 {
@@ -42,7 +44,15 @@ namespace NetPhlixDB.Web
                     Configuration.GetConnectionString("DefaultConnection"))
                     .UseLazyLoadingProxies());
 
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>(config =>
+                {
+                    config.SignIn.RequireConfirmedEmail = true;
+                    config.Password.RequireDigit = false;
+                    config.Password.RequireLowercase = false;
+                    config.Password.RequireUppercase = false;
+                    config.Password.RequireNonAlphanumeric = false;
+                    config.Password.RequiredUniqueChars = 0;
+                })
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<NetPhlixDbContext>()
                 .AddDefaultTokenProviders();
@@ -81,6 +91,10 @@ namespace NetPhlixDB.Web
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
 
+            // Email settings
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+
             services.AddMvc(options =>
                 {
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
@@ -91,6 +105,7 @@ namespace NetPhlixDB.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            //SendGridEmailSender.Execute().Wait();
             env.EnvironmentName = EnvironmentName.Development;
             //env.EnvironmentName = EnvironmentName.Production;
 
