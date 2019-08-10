@@ -15,7 +15,7 @@ using NetPhlixDB.Services;
 using NetPhlixDB.Services.Contracts;
 using NetPhlixDB.Services.Mapping.Profiles;
 using NetPhlixDB.Services.Mapping.Profiles.Admin;
-using NetPhlixDB.Web.Emails;
+using NetPhlixDB.Web.Hubs;
 using NetPhlixDB.Web.Middlewares;
 using NetPhlixDB.Web.Services;
 
