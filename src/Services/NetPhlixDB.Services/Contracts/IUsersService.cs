@@ -21,5 +21,7 @@ namespace NetPhlixDB.Services.Contracts
         Task<int> RemoveFavoriteMovie(string id, string userId);
 
         Task<User> GetUserByIdAsync(string id);
+
+        Task<PaginationMoviesViewModel> GetPageMovies(int? currentPage, string search, string genre);
     }
 }
