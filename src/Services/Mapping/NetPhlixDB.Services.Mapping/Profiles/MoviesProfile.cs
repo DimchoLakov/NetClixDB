@@ -19,7 +19,7 @@ namespace NetPhlixDB.Services.Mapping.Profiles
                 .ForMember(
                     dest => dest.ShortStoryline,
                        mapFrom => mapFrom.MapFrom(
-                                src => src.Storyline.Length >= 50 ? src.Storyline.Substring(0, 50) + "..." : src.Storyline))
+                                src => src.Storyline.Length >= 250 ? src.Storyline.Substring(0, 250) + "..." : src.Storyline))
                 .ForMember(
                     dest => dest.Rating,
                        mapFrom => mapFrom.MapFrom(

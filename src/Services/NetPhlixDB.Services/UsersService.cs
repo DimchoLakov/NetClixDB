@@ -80,7 +80,7 @@ namespace NetPhlixDB.Services
 
         public async Task<PaginationMoviesViewModel> GetPageMovies(int? currentPage, string search, string genre)
         {
-            var count = await this._dbContext.Movies.CountAsync();
+            var count = await this._dbContext.Users.Select(x => x.FavoriteMovies).CountAsync();
 
             var size = NetConstants.DefaultPageSize;
             var totalPages = (int)Math.Ceiling(decimal.Divide(count, size));
@@ -106,14 +106,18 @@ namespace NetPhlixDB.Services
             if (!string.IsNullOrWhiteSpace(search) &&
                 !string.IsNullOrWhiteSpace(genre))
             {
-                movies = await this._dbContext.Movies
+                movies = await this._dbContext.Users
+                    .SelectMany(x => x.FavoriteMovies)
+                    .Select(x => x.Movie)
                     .Where(x => x.Title.ToLower().Contains(search.ToLower()) &&
                                 x.MovieGenres.Any(mg => mg.Genre.Name == genre))
                     .Skip(skip)
                     .Take(take)
                     .OrderByDescending(x => x.DateReleased).ToListAsync();
 
-                var moviesCountAfterSearch = await this._dbContext.Movies
+                var moviesCountAfterSearch = await this._dbContext.Users
+                    .SelectMany(x => x.FavoriteMovies)
+                    .Select(x => x.Movie)
                     .Where(x => x.Title.ToLower().Contains(search.ToLower()) &&
                                 x.MovieGenres.Any(mg => mg.Genre.Name == genre))
                     .CountAsync();
@@ -122,7 +126,9 @@ namespace NetPhlixDB.Services
             }
             else if (!string.IsNullOrWhiteSpace(search))
             {
-                movies = await this._dbContext.Movies
+                movies = await this._dbContext.Users
+                    .SelectMany(x => x.FavoriteMovies)
+                    .Select(x => x.Movie)
                     .Where(x => x.Title.ToLower().Contains(search.ToLower()))
                     .Skip(skip)
                     .Take(take)
@@ -136,7 +142,9 @@ namespace NetPhlixDB.Services
             }
             else if (!string.IsNullOrWhiteSpace(genre))
             {
-                movies = await this._dbContext.Movies
+                movies = await this._dbContext.Users
+                    .SelectMany(x => x.FavoriteMovies)
+                    .Select(x => x.Movie)
                     .Where(x => x.MovieGenres.Any(mg => mg.Genre.Name.ToLower() == genre.ToLower()))
                     .Skip(skip)
                     .Take(take)
@@ -150,7 +158,9 @@ namespace NetPhlixDB.Services
             }
             else
             {
-                movies = await this._dbContext.Movies
+                movies = await this._dbContext.Users
+                    .SelectMany(x => x.FavoriteMovies)
+                    .Select(x => x.Movie)
                     .Skip(skip)
                     .Take(take)
                     .OrderByDescending(x => x.DateReleased).ToListAsync();

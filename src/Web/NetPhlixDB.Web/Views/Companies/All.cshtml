@@ -3,10 +3,12 @@
 @{
     ViewData["Title"] = "All Companies";
 }
+<link rel="stylesheet" type="text/css" href="~/lib/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css" />
+<link href="~/lib/DataTables/Buttons-1.5.6/css/buttons.dataTables.min.css" rel="stylesheet" />
 
 <div class="container w-75">
     <h1 class="text-center mt-3 mb-3 text-info">All Companies</h1>
-    <table class="table table-striped">
+    <table id="companies" class="table-condensed" style="width:100%">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -19,9 +21,18 @@
             @{ var index = 1;}
             @foreach (var c in Model)
             {
+                var img = "";
+                if (string.IsNullOrEmpty(c.Logo))
+                {
+                    img = "http://izuum.com/noimage.jpg";
+                }
+                else
+                {
+                    img = "https://image.tmdb.org/t/p/w500" + c.Logo;
+                }
                 <tr>
                     <th scope="row">@index</th>
-                    <td><a asp-controller="Companies" asp-action="Details" asp-route-id="@c.Id"><img class="img-fluid" style="height: 60px; width: 50px" src="@c.Logo" /></a></td>
+                    <td><a asp-controller="Companies" asp-action="Details" asp-route-id="@c.Id"><img class="img-fluid" style="height: 60px; width: 50px" src="@img" /></a></td>
                     <td><a asp-controller="Companies" asp-action="Details" asp-route-id="@c.Id">@c.Name</a></td>
                     <td>@c.CreatedOn.ToString("MMM/dd/yyyy")</td>
                 </tr>
@@ -36,3 +47,27 @@
     </div>
 </div>
 
+@section Scripts{
+
+    <script type="text/javascript" src="~/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables/Buttons-1.5.6/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables/Buttons-1.5.6/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables/pdfmake-0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables/pdfmake-0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables/Buttons-1.5.6/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables/Buttons-1.5.6/js/buttons.print.min.js"></script>
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('#companies').dataTable({
+                buttons: {
+                    buttons: ['copy', 'csv', 'excel']
+                }
+            });
+        })
+    </script>
+
+}

@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Favourite Movies";
 }
-<h2 class="pb-3 ml-3 text-info">All Movies</h2>
+<h2 class="pb-3 ml-3 text-info">My Favorite Movies</h2>
 
 <div class="row mt-3 mb-3 ml-1">
     <form asp-controller="Albums" asp-action="All" method="get">
@@ -17,6 +17,15 @@
         <input class="btn btn-info" type="submit" value="Search" />
     </form>
 </div>
+
+@if (Model.IndexMovieViewModels.Count > 0)
+{
+    <partial name="_PaginationPartial" />
+}
+else
+{
+    <p class="text-center font-italic">You have no favorite movies yet.</p>
+}
 
 @for (int i = 0; i < Model.IndexMovieViewModels.Count; i += 4)
 {
@@ -63,4 +72,7 @@
     </div>
 }
 
-<partial name="_PaginationPartial" />
+@if (Model.IndexMovieViewModels.Count > 0)
+{
+    <partial name="_PaginationPartial" />
+}

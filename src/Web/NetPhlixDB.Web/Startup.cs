@@ -1,14 +1,14 @@
-﻿using AutoMapper;
+﻿using AspNetCore.Email;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using NetPhlixDB.Data;
 using NetPhlixDB.Data.Models;
 using NetPhlixDB.Services;
@@ -18,6 +18,7 @@ using NetPhlixDB.Services.Mapping.Profiles.Admin;
 using NetPhlixDB.Web.Hubs;
 using NetPhlixDB.Web.Middlewares;
 using NetPhlixDB.Web.Services;
+using EmailSender = NetPhlixDB.Web.Services.EmailSender;
 
 namespace NetPhlixDB.Web
 {
@@ -54,7 +55,6 @@ namespace NetPhlixDB.Web
                     config.Password.RequireNonAlphanumeric = false;
                     config.Password.RequiredUniqueChars = 0;
                 })
-                .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<NetPhlixDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -79,7 +79,7 @@ namespace NetPhlixDB.Web
                 mc =>
                 {
                     mc.AddProfiles(
-                        typeof(MoviesProfile), 
+                        typeof(MoviesProfile),
                         typeof(UsersProfile),
                         typeof(CompaniesProfile),
                         typeof(ReviewsProfile),
@@ -101,16 +101,16 @@ namespace NetPhlixDB.Web
                 {
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             //SendGridEmailSender.Execute().Wait();
-            env.EnvironmentName = EnvironmentName.Development;
+            env.EnvironmentName = Environments.Development;
             //env.EnvironmentName = EnvironmentName.Production;
 
             using (var serviceScope = app.ApplicationServices.CreateScope())
@@ -126,7 +126,6 @@ namespace NetPhlixDB.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -143,25 +142,15 @@ namespace NetPhlixDB.Web
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.UseSignalR(routes =>
+            app.UseRouting();
+            app.UseEndpoints(endpoinds =>
             {
-                routes.MapHub<ChatHub>("/chatHub");
-            });
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "areas",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                );
+                endpoinds.MapHub<ChatHub>("/chatHub");
+                endpoinds.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                endpoinds.MapControllerRoute("areas", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                endpoinds.MapRazorPages();
             });
         }
     }

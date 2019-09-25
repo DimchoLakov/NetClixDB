@@ -48,11 +48,22 @@ namespace NetPhlixDB.Web.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }
         }
         
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                ModelState.AddModelError(string.Empty, "You are already signed in.");
+                return this.RedirectToAction("Index", "Home");
+            }
+
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
+            }
+
+            if (this.User.Identity.IsAuthenticated)
+            {
+                this.RedirectToPage("Home/Index");
             }
 
             returnUrl = returnUrl ?? Url.Content("~/");
@@ -63,6 +74,8 @@ namespace NetPhlixDB.Web.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
+
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
